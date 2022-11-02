@@ -2,7 +2,6 @@ package com.jchaaban.cmsshoppingcard.controllers;
 
 import com.jchaaban.cmsshoppingcard.models.PageRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Page;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +37,7 @@ public class AdminPagesController {
         if (bindingResult.hasErrors())
             return "admin/pages/add";
 
-        String slug = renameSlug(page.getSlug(), page);
+        String slug = setSlugName(page.getSlug(), page);
         Page existingSlug = pageRepository.findBySlug(slug);
 
         if (existingSlug != null){
@@ -70,7 +69,7 @@ public class AdminPagesController {
             return "admin/pages/edit";
         }
 
-        String slug = renameSlug(page.getSlug(), page);
+        String slug = setSlugName(page.getSlug(), page);
         Page existingSlug = pageRepository.findBySlugAndIdNot(slug,page.getId());
 
         if (existingSlug != null){
@@ -106,7 +105,7 @@ public class AdminPagesController {
         return "OK";
     }
 
-    private String renameSlug(String slug, Page page) {
+    private String setSlugName(String slug, Page page) {
         if (slug.trim().length() == 0)
             slug = page.getTitle().toLowerCase().replace(" ", "-");
         else
