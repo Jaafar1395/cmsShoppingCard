@@ -54,7 +54,7 @@ public class AdminPagesController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable(name = "id") Long id, Model model){
+    public String edit(@PathVariable(name = "id") Integer id, Model model){
         Page page = pageRepository.findById(id).get();
         model.addAttribute("page",page);
         return "admin/pages/edit";
@@ -62,6 +62,7 @@ public class AdminPagesController {
 
     @PostMapping("/edit")
     public String edit(@Valid Page page, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
+
         Page currentPage = pageRepository.findById(page.getId()).get();
 
         if (bindingResult.hasErrors()) {
@@ -72,9 +73,9 @@ public class AdminPagesController {
         String slug = setSlugName(page.getSlug(), page);
         Page existingSlug = pageRepository.findBySlugAndIdNot(slug,page.getId());
 
-        if (existingSlug != null){
+        if (existingSlug != null && existingSlug.getId() != page.getId()){
             handelRedirectMessagesOnFailure(page,redirectAttributes);
-            return "redirect:/admin/pages/edit";
+            return "redirect:/admin/pages/edit/" + page.getId();
         } else {
             handelRedirectMessagesOnSuccess(redirectAttributes,"Page was edited successfully");
             page.setSlug(slug);
@@ -85,7 +86,7 @@ public class AdminPagesController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes){
+    public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes){
         pageRepository.deleteById(id);
         handelRedirectMessagesOnSuccess(redirectAttributes,"Page was deleted successfully");
         return "redirect:/admin/pages";
@@ -97,7 +98,7 @@ public class AdminPagesController {
         Page page;
 
         for(int pageId : ids){
-            page = pageRepository.findById((long) pageId).get();
+            page = pageRepository.findById(pageId).get();
             page.setSorting(count++);
             pageRepository.save(page);
         }
@@ -107,10 +108,8 @@ public class AdminPagesController {
 
     private String setSlugName(String slug, Page page) {
         if (slug.trim().length() == 0)
-            slug = page.getTitle().toLowerCase().replace(" ", "-");
-        else
-            slug = slug.toLowerCase().replace(" ", "-");
-        return slug;
+            return page.getTitle().toLowerCase().replace(" ", "-");
+        return slug.toLowerCase().replace(" ", "-");
     }
 
     private void handelRedirectMessagesOnSuccess(RedirectAttributes redirectAttributes, String successMessage){
@@ -121,6 +120,7 @@ public class AdminPagesController {
     private void handelRedirectMessagesOnFailure(Page page, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute("message", "The Slug you chose already exist");
         redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+        // for edit form id case the user entered slug that already exists
         redirectAttributes.addFlashAttribute("page", page);
     }
 

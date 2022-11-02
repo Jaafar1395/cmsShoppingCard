@@ -14,7 +14,7 @@ public class Page {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 2, message = "Title must be at least 2 characters long")
@@ -22,7 +22,6 @@ public class Page {
 
     private String slug;
 
-    @NotBlank
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 2, message = "Content must be at least 2 characters long")
     private String content;

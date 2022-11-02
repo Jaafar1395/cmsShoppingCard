@@ -5,8 +5,9 @@
 <body>
 <div th:replace="/fragments/nav :: nav-admin"></div>
 <div class="container">
-    <!-- Example row of columns -->
+    <!-- in case the form has errors get the pageTitle from the model-->
     <h1 class="display-2 mb-5" th:text="'Edit ' + (${pageTitle} ?: ${page.title}) ">Edit a page</h1>
+
     <a href="/admin/pages" class="btn btn-dark mb-3">Back to pages</a>
 
     <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass }"></div>
@@ -35,7 +36,8 @@
         </div>
 
         <input th:if="${page.slug == 'home'}" type="hidden" th:field="*{slug}" th:value="${page.slug}">
-        <input type="hidden" th:field="*{id}" th:value="${page.slug}">
+        <!--in case of edit the id don't get generated so we need to pass it as a hidden field-->
+        <input type="hidden" th:field="*{id}" th:value="${page.id}">
         <input type="hidden" th:field="*{sorting}" th:value="${page.sorting}">
 
         <button class="btn btn-dark mt-3 mb-3">Save</button>
