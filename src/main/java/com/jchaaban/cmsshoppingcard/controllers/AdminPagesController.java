@@ -1,0 +1,114 @@
+package com.jchaaban.cmsshoppingcard.controllers;
+
+import com.jchaaban.cmsshoppingcard.models.PageRepository;
+import com.jchaaban.cmsshoppingcard.models.data.Page;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@Controller
+@RequestMapping("/admin/pages")
+public class AdminPagesController {
+
+    @Autowired
+    private PageRepository pageRepository;
+
+    @GetMapping
+    public String index(Model model){
+        List<Page> pages = pageRepository.findAll();
+        model.addAttribute("pages", pages);
+        return "admin/pages/index";
+    }
+
+    @GetMapping("/add")
+    public String add(@ModelAttribute Page page){
+        return "admin/pages/add";
+    }
+
+    @PostMapping("/add")
+    public String add(@Valid Page page, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
+
+        if (bindingResult.hasErrors())
+            return "admin/pages/add";
+
+        String slug = renameSlug(page.getSlug(), page);
+        Page existingSlug = pageRepository.findBySlug(slug);
+
+        if (existingSlug != null){
+            handelRedirectMessagesOnFailure(page,redirectAttributes);
+            return "redirect:/admin/pages/add";
+        } else {
+            handelRedirectMessagesOnSuccess(redirectAttributes,"Page was added successfully");
+            page.setSlug(slug);
+            page.setSorting(100);
+            pageRepository.save(page);
+        }
+
+        return "redirect:/admin/pages";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable(name = "id") Long id, Model model){
+        Page page = pageRepository.findById(id).get();
+        model.addAttribute("page",page);
+        return "admin/pages/edit";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@Valid Page page, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
+        Page currentPage = pageRepository.findById(page.getId()).get();
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("pageTitle", currentPage.getTitle());
+            return "admin/pages/edit";
+        }
+
+        String slug = renameSlug(page.getSlug(), page);
+        Page existingSlug = pageRepository.findBySlugAndIdNot(slug,page.getId());
+
+        if (existingSlug != null){
+            handelRedirectMessagesOnFailure(page,redirectAttributes);
+            return "redirect:/admin/pages/edit";
+        } else {
+            handelRedirectMessagesOnSuccess(redirectAttributes,"Page was edited successfully");
+            page.setSlug(slug);
+            pageRepository.save(page);
+        }
+
+        return "redirect:/admin/pages";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes){
+        pageRepository.deleteById(id);
+        handelRedirectMessagesOnSuccess(redirectAttributes,"Page was deleted successfully");
+        return "redirect:/admin/pages";
+    }
+
+    private String renameSlug(String slug, Page page) {
+        if (slug.trim().length() == 0)
+            slug = page.getTitle().toLowerCase().replace(" ", "-");
+        else
+            slug = slug.toLowerCase().replace(" ", "-");
+        return slug;
+    }
+
+    private void handelRedirectMessagesOnSuccess(RedirectAttributes redirectAttributes, String successMessage){
+        redirectAttributes.addFlashAttribute("message", successMessage);
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+    }
+
+    private void handelRedirectMessagesOnFailure(Page page, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("message", "The Slug you chose already exist");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+        redirectAttributes.addFlashAttribute("page", page);
+    }
+
+}

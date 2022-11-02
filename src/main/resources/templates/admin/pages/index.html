@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<div th:replace="/fragments/head :: head"></div>
+
+<body>
+<div th:replace="/fragments/nav :: nav-admin"></div>
+<div class="container">
+    <!-- Example row of columns -->
+    <h1 class="display-2 mb-5">Pages</h1>
+    <a href="/admin/pages/add" class="btn btn-success mt-1">Add new</a>
+
+    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>
+
+    <div th:if="${!pages.empty}">
+        <table class="table mt-5">
+            <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+            <tr th:each="page: ${pages}">
+                <td th:text="${page.title}"></td>
+                <td th:text="${page.slug}"></td>
+                <td><a class="btn btn-primary" th:href="@{'/admin/pages/edit/' + ${page.id}}">Edit</a></td>
+                <td th:if="${page.slug != 'home'}"><a class="btn btn-danger confirmDeletion" th:href="@{'/admin/pages/delete/' + ${page.id}}">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:unless="${!pages.empty}">
+        <p>There are No pages</p>
+        <h4 class="display-4">There are no pages at the moment</h4>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer :: footer"></div>
+
+</body>
+</html>
