@@ -22,7 +22,7 @@ public class AdminPagesController {
 
     @GetMapping
     public String index(Model model){
-        List<Page> pages = pageRepository.findAll();
+        List<Page> pages = pageRepository.findAllByOrderBySortingAsc();
         model.addAttribute("pages", pages);
         return "admin/pages/index";
     }
@@ -90,6 +90,20 @@ public class AdminPagesController {
         pageRepository.deleteById(id);
         handelRedirectMessagesOnSuccess(redirectAttributes,"Page was deleted successfully");
         return "redirect:/admin/pages";
+    }
+
+    @PostMapping("/reorder")
+    public @ResponseBody String reorder(@RequestParam("id[]") int [] ids){
+        int count = 1;
+        Page page;
+
+        for(int pageId : ids){
+            page = pageRepository.findById((long) pageId).get();
+            page.setSorting(count++);
+            pageRepository.save(page);
+        }
+
+        return "OK";
     }
 
     private String renameSlug(String slug, Page page) {
