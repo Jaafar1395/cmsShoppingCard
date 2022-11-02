@@ -13,7 +13,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 2, message = "Name must be at least 2 characters long")
