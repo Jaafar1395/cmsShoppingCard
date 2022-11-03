@@ -19,6 +19,7 @@
                 <th>Delete</th>
             </tr>
 
+            <!--every element in the table must have an id for sorting-->
             <tr th:each="category: ${categories}" th:id="'id_' + ${category.id}">
                 <td th:text="${category.name}"></td>
                 <td><a class="btn btn-primary" th:href="@{'/admin/categories/edit/' + ${category.id}}">Edit</a></td>
