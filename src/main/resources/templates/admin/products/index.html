@@ -5,7 +5,7 @@
 <body>
 <div th:replace="/fragments/nav :: nav-admin"></div>
 <div class="container">
-    <h1 class="display-2 mb-5">Pages</h1>
+    <h1 class="display-2 mb-5">Products</h1>
     <a href="/admin/products/add" class="btn btn-success mt-1">Add new product</a>
 
     <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>
@@ -21,19 +21,19 @@
                 <th>Delete</th>
             </tr>
 
-            <tr th:each="product: ${products}">
+            <tr th:each="product : ${products}">
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.image}"></td>
                 <td th:text="${product.categoryId}"></td>
-                <td th:text="${product.proce}"></td>
+                <td th:text="${product.price}"></td>
                 <td><a class="btn btn-primary" th:href="@{'/admin/products/edit/' + ${product.id}}">Edit</a></td>
-                <td><a class="btn btn-danger confirmDeletion" th:href="@{'/admin/products/delete/' + ${products.id}}">Delete</a></td>
+                <td><a class="btn btn-danger confirmDeletion" th:href="@{'/admin/products/delete/' + ${product.id}}">Delete</a></td>
             </tr>
         </table>
     </div>
 
     <div th:unless="${!products.empty}">
-        <h4 class="display-4">There are no pages at the moment</h4>
+        <h4 class="display-4">There are no Products at the moment</h4>
     </div>
 </div>
 
