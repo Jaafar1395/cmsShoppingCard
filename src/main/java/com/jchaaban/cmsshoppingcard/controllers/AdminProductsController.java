@@ -83,7 +83,7 @@ public class AdminProductsController {
         else {
             product.setSlug(slug);
             product.setImage(filename);
-            String uploadDirectory = "src/main/resources/media";
+            String uploadDirectory = "media";
             FileUploadUtil.saveFile(uploadDirectory, filename, file);
             productRepository.save(product);
             handelRedirectMessages(null,attributes, "Product was successfully added", "alert-success");
@@ -97,7 +97,5 @@ public class AdminProductsController {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("alertClass", alertClass);
     }
-
-
 
 }

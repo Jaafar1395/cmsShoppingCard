@@ -42,11 +42,11 @@
 
         <div class="form-group">
             <label>Category</label>
-            <select class="form-control" th:field="*{categoryId}">
+            <select class="form-control" th:field="*{category}">
                 <option th:value="0">Choose a category</option>
                 <option th:each="cat: ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
             </select>
-            <span class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></span>
+            <span class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
         </div>
 
         <button class="btn btn-dark mt-3 mb-3">Add</button>

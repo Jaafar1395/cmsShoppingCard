@@ -36,9 +36,13 @@ public class Product {
     @Pattern(regexp = "^[0-9]+([.][0-9]{1,2})?", message = "Expected format: 5, 5,99, 15, 15,99")
     private String price;
 
-    @Pattern(regexp = "^[1-9][0-9]*", message = "Please choose a category")
-    @Column(name = "category_id")
-    private String categoryId;
+//    @Pattern(regexp = "^[1-9][0-9]*", message = "Please choose a category")
+//    @Column(name = "category_id")
+//    private String categoryId;
+    
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
