@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -90,6 +87,15 @@ public class AdminProductsController {
             return "redirect:/admin/products";
         }
         return "redirect:/admin/products/add";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable(name = "id") Integer id, Model model){
+        Product product = productRepository.findById(id).get();
+        List<Category> categories = categoryRepository.findAll();
+        model.addAttribute("categories", categories);
+        model.addAttribute("product",product);
+        return "admin/products/edit";
     }
 
     private void handelRedirectMessages(Product product,RedirectAttributes redirectAttributes,String message, String alertClass){
