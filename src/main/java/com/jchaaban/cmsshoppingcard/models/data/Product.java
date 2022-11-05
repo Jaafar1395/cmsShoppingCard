@@ -37,7 +37,7 @@ public class Product {
     @Pattern(regexp = "^[0-9]+([.][0-9]{1,2})?", message = "Expected format: 5, 5,99, 15, 15,99")
     private String price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     @CategoryValidatorConstraint(message = "Please choose a category")
     private Category category;

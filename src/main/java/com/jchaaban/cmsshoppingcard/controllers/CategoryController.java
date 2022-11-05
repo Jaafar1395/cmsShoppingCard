@@ -2,6 +2,8 @@ package com.jchaaban.cmsshoppingcard.controllers;
 
 import com.jchaaban.cmsshoppingcard.models.CategoryRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
+import com.jchaaban.cmsshoppingcard.models.data.Product;
+import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -86,7 +89,11 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes){
+    public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) throws IOException {
+        Category category = categoryRepository.findById(id).get();
+        String categoryName = category.getName();
+        for (Product product : category.getProducts())
+            FileUploadUtil.deleteFile("media/" + categoryName, product.getImage());
         categoryRepository.deleteById(id);
         handelRedirectMessagesOnSuccess(redirectAttributes,"Category was deleted successfully");
         return "redirect:/admin/categories";

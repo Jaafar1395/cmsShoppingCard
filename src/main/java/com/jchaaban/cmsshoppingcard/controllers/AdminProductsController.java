@@ -152,6 +152,15 @@ public class AdminProductsController {
     }
 
 
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes attributes) throws IOException {
+        Product product = productRepository.findById(id).get();
+        productRepository.deleteById(product.getId());
+        FileUploadUtil.deleteFile("media/" + product.getCategory().getName(), product.getImage());
+        handelRedirectMessages(null,attributes, "Product was successfully deleted", "alert-success");
+        return "redirect:/admin/products";
+    }
+
 
     private void handelRedirectMessages(Product product,RedirectAttributes redirectAttributes,String message, String alertClass){
         redirectAttributes.addFlashAttribute("product", product);
