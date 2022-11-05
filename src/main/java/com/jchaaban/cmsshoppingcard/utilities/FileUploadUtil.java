@@ -54,8 +54,6 @@ public class FileUploadUtil {
     }
 
     public static void deleteFile(String uploadDirectory, String fileName) throws IOException {
-        System.out.println("uploadDirectory " + uploadDirectory);
-        System.out.println("filename " + fileName);
         Path uploadPath = Paths.get(uploadDirectory);
         try {
             Path filePath = uploadPath.resolve(fileName);

@@ -21,7 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
         String directoryName = "media";
         Path userPhotosDirectory = Paths.get(directoryName);
         String userPhotosPath = userPhotosDirectory.toFile().getAbsolutePath();
-        System.out.println(userPhotosPath);
         registry.addResourceHandler("/"+ directoryName + "/**" )
                 .addResourceLocations("file:/" + userPhotosPath + "/");
     }
