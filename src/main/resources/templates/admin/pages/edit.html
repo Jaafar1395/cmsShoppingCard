@@ -36,7 +36,6 @@
         </div>
 
         <input th:if="${page.slug == 'home'}" type="hidden" th:field="*{slug}" th:value="${page.slug}">
-        <!--in case of edit the id don't get generated so we need to pass it as a hidden field-->
         <input type="hidden" th:field="*{id}" th:value="${page.id}">
         <input type="hidden" th:field="*{sorting}" th:value="${page.sorting}">
 

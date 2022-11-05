@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.models.data;
 
+import com.jchaaban.cmsshoppingcard.validators.CategoryValidatorConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,12 +37,9 @@ public class Product {
     @Pattern(regexp = "^[0-9]+([.][0-9]{1,2})?", message = "Expected format: 5, 5,99, 15, 15,99")
     private String price;
 
-//    @Pattern(regexp = "^[1-9][0-9]*", message = "Please choose a category")
-//    @Column(name = "category_id")
-//    private String categoryId;
-    
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
+    @CategoryValidatorConstraint(message = "Please choose a category")
     private Category category;
 
     @Column(name = "created_at", updatable = false)
