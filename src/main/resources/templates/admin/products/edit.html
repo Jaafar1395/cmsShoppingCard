@@ -31,8 +31,7 @@
         <div class="form-group">
             <label>Product image</label>
             <input type="file" class="form-control mb-3" name="photo" placeholder="Photo" th:id="file">
-            <img width="100px" th:src="@{'/media/' + ${(product.image != null) ? product.category.name + '/' +
-            product.image : productOldImage}}" id="imgPreview">
+            <img width="100px" th:src="@{${(product.image != null) ? (product.imagePath) : productOldImage}}" id="imgPreview">
         </div>
 
         <div class="form-group">

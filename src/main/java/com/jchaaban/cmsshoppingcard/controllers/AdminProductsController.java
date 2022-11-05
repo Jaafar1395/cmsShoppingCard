@@ -3,8 +3,8 @@ package com.jchaaban.cmsshoppingcard.controllers;
 import com.jchaaban.cmsshoppingcard.models.CategoryRepository;
 import com.jchaaban.cmsshoppingcard.models.ProductRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
-import com.jchaaban.cmsshoppingcard.models.data.Page;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
+import com.jchaaban.cmsshoppingcard.services.ProductService;
 import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -30,6 +27,8 @@ public class AdminProductsController {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public String index(Model model){
@@ -59,33 +58,18 @@ public class AdminProductsController {
 
         String filename = StringUtils.cleanPath(file.getOriginalFilename()).replaceAll(" ", "");
         String slug = product.getName().toLowerCase().replace(" ", "-");
-        Product existingProduct = productRepository.findBySlug(slug);
 
-        if (file.getSize() == 0)
-            handelRedirectMessages(
-                    product,
-                    attributes,
-                    "Please select an image for the product",
-                    "alert-danger");
-        else if (!(filename.endsWith("jpg") || filename.endsWith("png") || filename.endsWith("jpeg"))) handelRedirectMessages(
-                product,
-                attributes,
-                "Image must have on of the following extensions: jpg, jpeg, png",
-                "alert-danger");
-        else if(existingProduct != null) handelRedirectMessages(
-                product,
-                attributes,
-                "The product you tried to add already exists",
-                "alert-danger");
+        if (productService.noFileUploaded(file))
+            productService.handelNoFileUploaded(product,attributes);
+        else if (productService.invalidFileFormat(filename))
+            productService.handelInvalidFile(product,attributes);
+        else if(productService.productExist(product,slug,false))
+            productService.handelProductExists(product,attributes);
         else {
-            product.setSlug(slug);
-            product.setImage(filename);
-            String uploadDirectory = "media/" + product.getCategory().getName();
-            FileUploadUtil.saveFile(uploadDirectory, filename, file);
-            productRepository.save(product);
-            handelRedirectMessages(null,attributes, "Product was successfully added", "alert-success");
+            productService.saveNewProduct(product,file,filename,slug,attributes);
             return "redirect:/admin/products";
         }
+
         return "redirect:/admin/products/add";
     }
 
@@ -106,66 +90,42 @@ public class AdminProductsController {
                       @RequestParam("photo") MultipartFile file,
                       RedirectAttributes attributes, Model model) throws IOException {
 
-        Product currentProduct = productRepository.findById(product.getId()).get();
+        Product existingProduct = productRepository.findById(product.getId()).get();
 
         if (bindingResult.hasErrors()){
             List<Category> categories = categoryRepository.findAll();
             model.addAttribute("categories", categories);
-            model.addAttribute("productOldImage", currentProduct.getImage());
+            model.addAttribute("productOldImage", existingProduct.getImagePath());
             return "/admin/products/edit";
         }
 
-        boolean newFileUploaded = file.getSize() > 0;
+        boolean newFileUploaded = !productService.noFileUploaded(file);
+
         String filename;
         if (newFileUploaded)
             filename = StringUtils.cleanPath(file.getOriginalFilename()).replaceAll(" ", "");
         else
-            filename = currentProduct.getImage();
+            filename = existingProduct.getImage();
 
         String slug = product.getName().toLowerCase().replace(" ", "-");
-        Product existingProduct = productRepository.findBySlug(slug);
 
-        if (newFileUploaded && !(filename.endsWith("jpg") || filename.endsWith("png") || filename.endsWith("jpeg"))) handelRedirectMessages(
-                product,
-                attributes,
-                "Image must have on of the following extensions: jpg, jpeg, png",
-                "alert-danger");
-        else if(existingProduct != null && existingProduct.getId() != product.getId()) handelRedirectMessages(
-                product,
-                attributes,
-                "The product you tried to add already exists",
-                "alert-danger");
+        if (newFileUploaded && productService.invalidFileFormat(filename))
+            productService.handelInvalidFile(product,attributes);
+        else if(productService.productExist(product,slug,true))
+            productService.handelProductExists(product,attributes);
         else {
-            product.setSlug(slug);
-            product.setImage(filename);
-            String uploadDirectory = "media/" + product.getCategory().getName();
-            if (newFileUploaded || currentProduct.getCategory().getName() != product.getCategory().getName()) {
-                FileUploadUtil.saveFile(uploadDirectory, filename, file);
-                FileUploadUtil.deleteFile("media/" + currentProduct.getCategory().getName(), currentProduct.getImage());
-            }
-            handelRedirectMessages(null,attributes, "Product was successfully added", "alert-success");
-            productRepository.save(product);
-
+            productService.saveEditedProduct(product,existingProduct,file,filename,slug,newFileUploaded,attributes);
             return "redirect:/admin/products";
         }
+
         return "redirect:/admin/products/edit/" + product.getId();
     }
 
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes attributes) throws IOException {
-        Product product = productRepository.findById(id).get();
-        productRepository.deleteById(product.getId());
-        FileUploadUtil.deleteFile("media/" + product.getCategory().getName(), product.getImage());
-        handelRedirectMessages(null,attributes, "Product was successfully deleted", "alert-success");
+        productService.deleteProduct(id);
+        productService.handelSuccessOperation(null, "Product was successfully deleted", attributes);
         return "redirect:/admin/products";
-    }
-
-
-    private void handelRedirectMessages(Product product,RedirectAttributes redirectAttributes,String message, String alertClass){
-        redirectAttributes.addFlashAttribute("product", product);
-        redirectAttributes.addFlashAttribute("message", message);
-        redirectAttributes.addFlashAttribute("alertClass", alertClass);
     }
 
 }

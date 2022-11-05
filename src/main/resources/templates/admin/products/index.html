@@ -24,9 +24,9 @@
             <tr th:each="product : ${products}">
                 <td th:text="${product.name}"></td>
                 <td>
-                    <img width="100px" height="100px" th:src="@{'/media/' + ${product.category.name + '/' + product.image}}">
+                    <img width="100px" height="100px" th:src="@{${product.imagePath}}">
                 </td>
-                <td th:text="${product.category.name}"></td>
+                <td th:text="${product.categoryName}"></td>
                 <td th:text="${product.price}"></td>
                 <td><a class="btn btn-primary" th:href="@{'/admin/products/edit/' + ${product.id}}">Edit</a></td>
                 <td><a class="btn btn-danger confirmDeletion" th:href="@{'/admin/products/delete/' + ${product.id}}">Delete</a></td>

@@ -50,4 +50,12 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+
+    public String getImagePath() {
+        return "/media/" + category.getName() + "/" + image;
+    }
+
+    public String getCategoryName() {
+        return category.getName();
+    }
 }
