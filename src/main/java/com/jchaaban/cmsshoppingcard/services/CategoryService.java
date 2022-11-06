@@ -29,6 +29,10 @@ public class CategoryService {
         return repository.findById(id).get();
     }
 
+    public Category findBySlug(String slug) {
+        return repository.findBySlug(slug);
+    }
+
     public void delete(Integer id) throws IOException {
         Category category = repository.findById(id).get();
         String categoryName = category.getName();

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,9 +32,18 @@ public class ProductService {
         return repository.findById(id).get();
     }
 
+    public Page<Product> findAllByCategoryId(Integer categoryId, Pageable pageable) {
+        return repository.findAllByCategoryId(categoryId,pageable);
+    }
+
     public Long count() {
         return repository.count();
     }
+
+    public Long countByCategoryId(Integer categoryId) {
+        return repository.countByCategoryId(categoryId);
+    }
+
 
     public boolean productExist(Product product, String slug, boolean editMode){
         Product existingProduct = repository.findBySlug(slug);

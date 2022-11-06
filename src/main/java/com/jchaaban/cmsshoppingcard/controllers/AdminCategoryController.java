@@ -1,6 +1,5 @@
 package com.jchaaban.cmsshoppingcard.controllers;
 
-import com.jchaaban.cmsshoppingcard.models.CategoryRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin/categories")
-public class CategoryController {
+public class AdminCategoryController {
 
     @Autowired
     private CategoryService categoryService;
