@@ -68,6 +68,8 @@ public class ProductService {
         repository.save(product);
     }
 
+
+
     public void handelNoFileUploaded(Product product, RedirectAttributes attributes){
         handelFailOperation(product, "Please select an image for the product", attributes);
     }

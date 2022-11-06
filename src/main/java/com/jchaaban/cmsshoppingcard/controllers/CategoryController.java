@@ -2,8 +2,7 @@ package com.jchaaban.cmsshoppingcard.controllers;
 
 import com.jchaaban.cmsshoppingcard.models.CategoryRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
-import com.jchaaban.cmsshoppingcard.models.data.Product;
-import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
+import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +19,11 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     @GetMapping
     public String index(Model model){
-        List<Category> categories = categoryRepository.findAllByOrderBySortingAsc();
+        List<Category> categories = categoryService.findAllByOrderBySortingAsc();
         model.addAttribute("categories", categories);
         return "admin/categories/index";
     }
@@ -40,17 +39,13 @@ public class CategoryController {
         if (bindingResult.hasErrors())
             return "admin/categories/add";
 
-        String slug = setSlugUsingCategoryName(category.getName(), category);
-        Category categoryHavingSameSlug = categoryRepository.findByName(slug);
+        String categoryName = category.getName();
 
-        if (categoryHavingSameSlug != null){
-            handelRedirectMessagesOnFailure(category,redirectAttributes);
+        if (categoryService.categoryExist(category,category.getName(),false)){
+            categoryService.handelRedirectMessagesOnFailure(category,redirectAttributes);
             return "redirect:/admin/categories/add";
         } else {
-            handelRedirectMessagesOnSuccess(redirectAttributes,"Page was added successfully");
-            category.setSlug(slug);
-            category.setSorting(100);
-            categoryRepository.save(category);
+            categoryService.saveNewCategory(category,categoryName,redirectAttributes);
         }
 
         return "redirect:/admin/categories";
@@ -58,7 +53,7 @@ public class CategoryController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable(name = "id") Integer id, Model model){
-        Category category = categoryRepository.findById(id).get();
+        Category category = categoryService.findById(id);
         model.addAttribute("category",category);
         return "admin/categories/edit";
     }
@@ -66,7 +61,7 @@ public class CategoryController {
     @PostMapping("/edit")
     public String edit(@Valid Category category, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
 
-        Category currentCategory = categoryRepository.findById(category.getId()).get();
+        Category currentCategory = categoryService.findById(category.getId());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("categoryTitle", currentCategory.getName());
@@ -74,15 +69,12 @@ public class CategoryController {
         }
 
         String categoryName = category.getName();
-        Category existingCategory = categoryRepository.findByName(categoryName);
-        if (existingCategory != null && existingCategory.getId() != category.getId()){
-            handelRedirectMessagesOnFailure(category,redirectAttributes);
+
+        if (categoryService.categoryExist(category,categoryName,true)){
+            categoryService.handelRedirectMessagesOnFailure(category,redirectAttributes);
             return "redirect:/admin/categories/edit/" + category.getId();
         } else {
-            handelRedirectMessagesOnSuccess(redirectAttributes,"Category was edited successfully");
-            String slug = setSlugUsingCategoryName(categoryName,category);
-            category.setSlug(slug);
-            categoryRepository.save(category);
+            categoryService.saveEditedCategory(category,categoryName,redirectAttributes);
         }
 
         return "redirect:/admin/categories";
@@ -90,12 +82,8 @@ public class CategoryController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) throws IOException {
-        Category category = categoryRepository.findById(id).get();
-        String categoryName = category.getName();
-        for (Product product : category.getProducts())
-            FileUploadUtil.deleteFile("media/" + categoryName, product.getImage());
-        categoryRepository.deleteById(id);
-        handelRedirectMessagesOnSuccess(redirectAttributes,"Category was deleted successfully");
+        categoryService.delete(id);
+        categoryService.handelRedirectMessagesOnSuccess(redirectAttributes,"Category was deleted successfully");
         return "redirect:/admin/categories";
     }
 
@@ -103,34 +91,14 @@ public class CategoryController {
     public @ResponseBody
     String reorder(@RequestParam("id[]") int [] ids){
         int count = 1;
-        Category page;
+        Category category;
 
         for(int pageId : ids){
-            page = categoryRepository.findById(pageId).get();
-            page.setSorting(count++);
-            categoryRepository.save(page);
+            category = categoryService.findById(pageId);
+            category.setSorting(count++);
+            categoryService.save(category);
         }
 
         return "OK";
     }
-
-
-    private String setSlugUsingCategoryName(String slug, Category category) {
-        if (slug.trim().length() == 0)
-            return category.getName().toLowerCase().replace(" ", "-");
-        return slug.toLowerCase().replace(" ", "-");
-    }
-
-    private void handelRedirectMessagesOnSuccess(RedirectAttributes redirectAttributes, String successMessage){
-        redirectAttributes.addFlashAttribute("message", successMessage);
-        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-    }
-
-    private void handelRedirectMessagesOnFailure(Category category, RedirectAttributes redirectAttributes){
-        redirectAttributes.addFlashAttribute("message", "The Category you chose already exist");
-        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-        redirectAttributes.addFlashAttribute("categoryInfo", category);
-    }
-
-
 }
