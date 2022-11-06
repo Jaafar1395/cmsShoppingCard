@@ -24,6 +24,7 @@ public class Page {
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 2, message = "Content must be at least 2 characters long")
+    @Column(columnDefinition="LONGTEXT")
     private String content;
 
     private int sorting;

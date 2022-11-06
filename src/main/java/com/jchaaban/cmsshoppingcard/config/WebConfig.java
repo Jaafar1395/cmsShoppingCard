@@ -11,10 +11,11 @@ import java.nio.file.Paths;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("home"); // just return a view
-    }
+    // just to show that this works
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/").setViewName("home"); // just return a view
+//    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

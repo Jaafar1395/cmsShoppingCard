@@ -4,12 +4,11 @@
 
 <body>
     <div th:replace="/fragments/nav :: nav-front"></div>
-    <div class="container">
-        <!-- Example row of columns -->
+    <!-- container-fluid takes the whole width of the screen -->
+    <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                <h2>Heading</h2>
-            </div>
+            <div class="col-7" th:utext="${page.content}"></div>
+            <div class="col"></div>
         </div>
     </div>
 

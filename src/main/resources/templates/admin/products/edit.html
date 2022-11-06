@@ -24,7 +24,7 @@
 
         <div class="form-group">
             <label>Description</label>
-            <input type="text" class="form-control mb-3" th:field="*{description}" placeholder="Description">
+            <textarea th:field="*{description}" rows="10" class="form-control" placeholder="Description"></textarea>
             <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </div>
 

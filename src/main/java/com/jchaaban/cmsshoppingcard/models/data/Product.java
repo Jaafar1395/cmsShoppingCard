@@ -30,6 +30,7 @@ public class Product {
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 10, message = "Description must be at least 10 characters long")
+    @Column(columnDefinition="LONGTEXT")
     private String description;
 
     private String image;
