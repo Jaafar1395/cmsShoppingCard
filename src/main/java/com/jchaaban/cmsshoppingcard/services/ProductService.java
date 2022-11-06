@@ -9,12 +9,21 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+
+    public List<Product> findAll(){
+        return repository.findAll();
+    }
+
+    public Product findById(Integer id){
+        return repository.findById(id).get();
+    }
 
     public boolean productExist(Product product, String slug, boolean editMode){
         Product existingProduct = repository.findBySlug(slug);

@@ -1,9 +1,9 @@
 package com.jchaaban.cmsshoppingcard.controllers;
 
-import com.jchaaban.cmsshoppingcard.models.CategoryRepository;
 import com.jchaaban.cmsshoppingcard.models.ProductRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
+import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import com.jchaaban.cmsshoppingcard.services.ProductService;
 import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,22 +24,20 @@ import java.util.List;
 public class AdminProductsController {
 
     @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     @Autowired
     private ProductService productService;
 
     @GetMapping
     public String index(Model model){
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productService.findAll();
         model.addAttribute("products", products);
         return "/admin/products/index";
     }
 
     @GetMapping("/add")
     public String add(Product product, Model model){
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         return "/admin/products/add";
     }
@@ -51,7 +49,7 @@ public class AdminProductsController {
                     RedirectAttributes attributes, Model model) throws IOException {
 
         if (bindingResult.hasErrors()){
-            List<Category> categories = categoryRepository.findAll();
+            List<Category> categories = categoryService.findAll();
             model.addAttribute("categories", categories);
             return "/admin/products/add";
         }
@@ -75,8 +73,8 @@ public class AdminProductsController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable(name = "id") Integer id, Model model){
-        Product product = productRepository.findById(id).get();
-        List<Category> categories = categoryRepository.findAll();
+        Product product = productService.findById(id);
+        List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         model.addAttribute("product",product);
         return "admin/products/edit";
@@ -90,10 +88,10 @@ public class AdminProductsController {
                       @RequestParam("photo") MultipartFile file,
                       RedirectAttributes attributes, Model model) throws IOException {
 
-        Product existingProduct = productRepository.findById(product.getId()).get();
+        Product existingProduct = productService.findById(product.getId());
 
         if (bindingResult.hasErrors()){
-            List<Category> categories = categoryRepository.findAll();
+            List<Category> categories = categoryService.findAll();
             model.addAttribute("categories", categories);
             model.addAttribute("productOldImage", existingProduct.getImagePath());
             return "/admin/products/edit";

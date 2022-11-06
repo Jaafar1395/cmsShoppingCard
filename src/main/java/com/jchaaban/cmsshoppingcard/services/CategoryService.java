@@ -17,6 +17,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repository;
 
+    public List<Category> findAll(){
+        return repository.findAll();
+    }
+
     public List<Category> findAllByOrderBySortingAsc(){
         return repository.findAllByOrderBySortingAsc();
     }
@@ -31,10 +35,6 @@ public class CategoryService {
         for (Product product : category.getProducts())
             FileUploadUtil.deleteFile("media/" + categoryName, product.getImage());
         repository.deleteById(id);
-    }
-
-    public Category findByName(String name){
-        return repository.findByName(name);
     }
 
     public boolean categoryExist(Category category, String categoryName, boolean editMode){

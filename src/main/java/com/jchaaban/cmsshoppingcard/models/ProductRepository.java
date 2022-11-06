@@ -6,5 +6,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @ResponseBody
 public interface ProductRepository extends JpaRepository<Product,Integer> {
+
     Product findBySlug(String slug);
+
 }
