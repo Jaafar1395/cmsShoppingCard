@@ -4,6 +4,8 @@ import com.jchaaban.cmsshoppingcard.models.ProductRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
 import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,8 +23,16 @@ public class ProductService {
         return repository.findAll();
     }
 
+    public Page<Product> findAll(Pageable pageable){
+        return repository.findAll(pageable);
+    }
+
     public Product findById(Integer id){
         return repository.findById(id).get();
+    }
+
+    public Long count() {
+        return repository.count();
     }
 
     public boolean productExist(Product product, String slug, boolean editMode){
@@ -104,6 +114,4 @@ public class ProductService {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("alertClass", alertClass);
     }
-
-
 }

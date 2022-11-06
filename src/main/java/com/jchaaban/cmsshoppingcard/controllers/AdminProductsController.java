@@ -5,8 +5,10 @@ import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
 import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import com.jchaaban.cmsshoppingcard.services.ProductService;
-import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -29,8 +31,18 @@ public class AdminProductsController {
     private ProductService productService;
 
     @GetMapping
-    public String index(Model model){
-        List<Product> products = productService.findAll();
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer pageNum){
+        int page = pageNum == null ? 0 : pageNum;
+        int perPage = 2;
+        Pageable pageable = PageRequest.of(page,perPage);
+        Page<Product> products = productService.findAll(pageable);
+        Long count = productService.count();
+        double pageCount = Math.ceil((double) count / (double) perPage);
+
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("perPage", perPage);
+        model.addAttribute("count", count);
+        model.addAttribute("page", page);
         model.addAttribute("products", products);
         return "/admin/products/index";
     }
