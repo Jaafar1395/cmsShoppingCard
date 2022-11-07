@@ -1,4 +1,4 @@
-package com.jchaaban.cmsshoppingcard.controllers;
+package com.jchaaban.cmsshoppingcard.controllers.home;
 
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
@@ -28,7 +28,7 @@ public class CategoriesController {
     public String category(@PathVariable String slug, Model model,
                            @RequestParam(value = "page", required = false) Integer pageNum){
         int page = pageNum == null ? 0 : pageNum;
-        int perPage = 2;
+        int perPage = 4;
         Pageable pageable = PageRequest.of(page,perPage);
         long count;
         Page<Product> products;

@@ -1,4 +1,4 @@
-package com.jchaaban.cmsshoppingcard.controllers;
+package com.jchaaban.cmsshoppingcard.controllers.admin;
 
 import com.jchaaban.cmsshoppingcard.models.ProductRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
@@ -33,7 +33,7 @@ public class AdminProductsController {
     @GetMapping
     public String index(Model model, @RequestParam(value = "page", required = false) Integer pageNum){
         int page = pageNum == null ? 0 : pageNum;
-        int perPage = 2;
+        int perPage = 4;
         Pageable pageable = PageRequest.of(page,perPage);
         Page<Product> products = productService.findAll(pageable);
         Long count = productService.count();

@@ -1,4 +1,4 @@
-package com.jchaaban.cmsshoppingcard.controllers;
+package com.jchaaban.cmsshoppingcard.controllers.admin;
 
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.services.CategoryService;

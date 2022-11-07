@@ -3,19 +3,21 @@ package com.jchaaban.cmsshoppingcard.models;
 import lombok.Data;
 
 @Data
-public class Card {
+public class CardItem {
 
     private Integer id;
     private String name;
     private String price;
-    private String quantity;
-    private String image;
+    private int quantity;
+    private String imagePath;
 
-    public Card(Integer id, String name, String price, String quantity, String image) {
+    public CardItem(Integer id, String name, String price, int quantity, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.image = image;
+        this.imagePath = image;
     }
+
+    public void incrementQuantity(){++quantity;}
 }
