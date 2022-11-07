@@ -28,16 +28,32 @@ public class CardController {
         if (session.getAttribute("card") == null){
             HashMap<Integer, CardItem> card = new HashMap<>();
             card.put(id,new CardItem(product.getId(),product.getName(),product.getPrice(), 1,product.getImagePath()));
+            session.setAttribute("card", card);
         } else {
             HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
-            if (card.containsKey(id))
+            if (card.containsKey(id)) {
                 card.get(id).incrementQuantity();
+            }
             else {
                 card.put(id,new CardItem(product.getId(),product.getName(),product.getPrice(), 1,product.getImagePath()));
                 session.setAttribute("card", card);
             }
         }
 
-        return null;
+        HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
+
+        int cardSize = 0;
+        double cardTotal = 0;
+
+        for (CardItem cardItem : card.values()) {
+            cardSize+= cardItem.getQuantity();
+            cardTotal+= cardItem.getQuantity() * Double.parseDouble(cardItem.getPrice());
+        }
+
+        model.addAttribute("cardSize", cardSize);
+        model.addAttribute("cardTotal", cardTotal);
+
+
+        return "card_view";
     }
 }
