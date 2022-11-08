@@ -1,13 +1,13 @@
 <div class="bg-dark text-white p-3 mt-3" th:fragments="card">
-    <div class="cart cartActive" th:if="${cartActive}">
-        <p>You have <span th:text="${cardSize}"></span> in your card</p>
-        <p>Total <span th:text="'$' + ${#numbers.formatDecimal(cardTotal,0,'COMMA', 2, 'POINT')}"></span></p>
-        <p>
+    <div th:if="${session.containsKey('card')}" class="cart cartActive">
+        <p>You have <span th:text="${cardSize != null ? cardSize  : ' 0 '}"></span> items in your card</p>
+        <p>Total $ <span th:text="cardTotal == null ? '0' : ${#numbers.formatDecimal(cardTotal,0,'COMMA', 2, 'POINT') }"></span></p>
+        <p th:if="${cardSize != null}">
             <a href="/cart/view" class="btn btn-success">View Card</a>
             <a href="/cart/clear" class="btn btn-danger float-right">View Card</a>
         </p>
     </div>
-    <div class="cart cartInactive" th:unless="${cartActive}">
+    <div class="cart cartInactive" th:unless="${session.containsKey('card')}">
         <p>Your card is empty.</p>
     </div>
 </div>
