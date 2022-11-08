@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
@@ -22,6 +23,8 @@ public class CardController {
 
     @Autowired
     private CardService cardService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/add/{id}")
     public String add(@PathVariable Integer id, HttpSession session, Model model,
@@ -35,6 +38,26 @@ public class CardController {
         }
 
         return "card_view";
+    }
+
+    @GetMapping("/subtract/{id}")
+    public String subtract(@PathVariable Integer id, HttpSession session, HttpServletRequest servletRequest){
+
+        Product product = productService.findById(id);
+        HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
+        int quantity = card.get(id).getQuantity();
+        if (quantity == 1){
+            card.remove(id);
+            if (card.size() == 0){
+                session.removeAttribute("cart");
+            }
+        } else {
+            card.put(id,new CardItem(product.getId(),product.getName(),product.getPrice(), --quantity,product.getImagePath()));
+        }
+
+        String referLink = servletRequest.getHeader("referer");
+
+        return "redirect:" + referLink;
     }
 
     @GetMapping("/details")

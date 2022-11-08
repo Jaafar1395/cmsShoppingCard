@@ -24,13 +24,14 @@
                 <tr th:each="element: ${card}">
                     <td th:text="${element.value.name}"></td>
                     <td>
-                        <img style="width: 100px;" th:src="@{${element.value.imagePath}}" />
+                        <img style="width: 100px;" th:src="@{${element.value.imagePath}}"/>
                     </td>
                     <td>
                         <span th:class="${element.value.id} + '_quantity'" th:text="${element.value.quantity}"></span>
                         <a th:attr="data-id=${element.value.id}" class="btn btn-success btn-sm incrementQuantity">+</a>
 
-                        <a th:href="@{'/card/subtract/'+${element.value.id}}" class="btn btn-primary btn-sm">-</a>
+                        <a th:href="@{'/card/subtract/'+${element.value.id}}" th:attr="data-id=${element.value.id}"
+                           class="btn btn-primary btn-sm decrementQuantity">-</a>
                         <a th:href="@{'/card/remove/'+${element.value.id}}" class="btn btn-danger btn-sm">remove</a>
                     </td>
                     <td th:class="${element.value.id} + '_price'" th:text="'$' + ${element.value.price}"></td>
@@ -42,14 +43,15 @@
                 </tr>
                 <tr>
                     <td class="text-right" colspan="4"><b>Grand Total:</b></td>
-                    <td colspan="1" class="grandTotal" th:text="'$' + ${#numbers.formatDecimal(cardTotal,3,'COMMA',2,'POINT')}"></td>
+                    <td colspan="1" class="grandTotal"
+                        th:text="'$' + ${#numbers.formatDecimal(cardTotal,3,'COMMA',2,'POINT')}"></td>
                 </tr>
                 <tr>
                     <td>
-                        <a th:href="@{'/card/clear'}"  class="btn btn-danger">Clear Card</a>
+                        <a th:href="@{'/card/clear'}" class="btn btn-danger">Clear Card</a>
                     </td>
                     <td colspan="4">
-                        <a href="#"  class="btn btn-success checkout">Checkout</a>
+                        <a href="#" class="btn btn-success checkout">Checkout</a>
                     </td>
                 </tr>
             </table>
@@ -62,61 +64,78 @@
 
 <script>
 
-        function toFloat(strPrice){
-            strPrice = strPrice.replace(/[^\d.]/g, '');
-            var lastPeriod = strPrice.lastIndexOf('.');
+    function toFloat(strPrice) {
+        strPrice = strPrice.replace(/[^\d.]/g, '');
+        var lastPeriod = strPrice.lastIndexOf('.');
 
-            let integerPart = strPrice.substring(0, lastPeriod);
+        let integerPart = strPrice.substring(0, lastPeriod);
 
-            integerPart = parseFloat(integerPart);
+        integerPart = parseFloat(integerPart);
 
-            let fractionalPart = strPrice.substring(strPrice.length - (strPrice.length - lastPeriod - 1));
+        let fractionalPart = strPrice.substring(strPrice.length - (strPrice.length - lastPeriod - 1));
 
-            let divideOneMoreTime = fractionalPart.charAt(0) === '0';
+        let divideOneMoreTime = fractionalPart.charAt(0) === '0';
 
-            fractionalPart = parseFloat(fractionalPart);
+        fractionalPart = parseFloat(fractionalPart);
 
-            while (fractionalPart > 1)
-                fractionalPart /= 10;
+        while (fractionalPart > 1)
+            fractionalPart /= 10;
 
-            if (divideOneMoreTime)
-                fractionalPart /= 10;
+        if (divideOneMoreTime)
+            fractionalPart /= 10;
 
-            return integerPart + fractionalPart;
-        }
+        return integerPart + fractionalPart;
+    }
 
 
-        function incrementPrices(id){
-            let quantitySpan = $("." + id + "_quantity");
-            let currentQuantity = parseInt(quantitySpan.html());
-            quantitySpan.html(++currentQuantity);
+    function updatePrices(id,incrementMode) {
+        let quantitySpan = $("." + id + "_quantity");
+        let currentQuantity = parseInt(quantitySpan.html());
+        quantitySpan.html((incrementMode === true) ? ++currentQuantity : --currentQuantity);
 
-            let priceSpan = $("." + id + "_price");
-            let price = toFloat(priceSpan.html());
+        let priceSpan = $("." + id + "_price");
+        let price = toFloat(priceSpan.html());
 
-            let subTotal = $("." + id + "_subTotal");
-            let currentSubPrice = toFloat(subTotal.html());
+        let subTotal = $("." + id + "_subTotal");
+        let currentSubPrice = toFloat(subTotal.html());
 
-            let dollarUS = Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            });
+        let dollarUS = Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+        });
 
-            subTotal.html(dollarUS.format(currentSubPrice + price));
+        subTotal.html(dollarUS.format((incrementMode === true) ? (currentSubPrice + price) : (currentSubPrice - price)));
 
-            let grandTotal = $(".grandTotal");
-            let currentGrandTotal = toFloat(grandTotal.html());
+        let grandTotal = $(".grandTotal");
+        let currentGrandTotal = toFloat(grandTotal.html());
+        currentGrandTotal = (incrementMode === true) ? (currentGrandTotal + price) : (currentGrandTotal - price);
+        grandTotal.html(dollarUS.format(currentGrandTotal));
 
-            grandTotal.html(dollarUS.format(currentGrandTotal + price));
-        }
+        if (currentQuantity === 0)
+            quantitySpan.closest('tr').remove();
 
-        $("a.incrementQuantity").click(function (e){
+        if (currentGrandTotal === 0)
+            window.location.replace("/category/all");
+
+    }
+
+    $("a.incrementQuantity").click(function (e) {
         e.preventDefault();
         let $this = $(this);
         let id = $this.attr("data-id");
         let url = "/card/add/" + id;
-        $.get(url,{}, function () {
-            incrementPrices(id);
+        $.get(url, {}, function () {
+            updatePrices(id,true);
+        });
+    });
+
+    $("a.decrementQuantity").click(function (e) {
+        e.preventDefault();
+        let $this = $(this);
+        let id = $this.attr("data-id");
+        let url = "/card/subtract/" + id;
+        $.get(url, {}, function () {
+            updatePrices(id,false);
         });
     });
 </script>
