@@ -51,12 +51,6 @@ public class CategoryService {
         return false;
     }
 
-    public String setSlugUsingCategoryName(String slug, Category category) {
-        if (slug.trim().length() == 0)
-            return category.getName().toLowerCase().replace(" ", "-");
-        return slug.toLowerCase().replace(" ", "-");
-    }
-
     public void saveNewCategory(Category category, String categoryName, RedirectAttributes redirectAttributes) {
         category.setSorting(100);
         saveFormCategory(category,categoryName);
@@ -66,16 +60,6 @@ public class CategoryService {
     public void saveEditedCategory(Category category, String categoryName, RedirectAttributes redirectAttributes) {
         saveFormCategory(category,categoryName);
         handelRedirectMessagesOnSuccess(redirectAttributes,"Category was edited successfully");
-    }
-
-    private void saveFormCategory(Category category, String categoryName){
-        String slug = setSlugUsingCategoryName(categoryName,category);
-        category.setSlug(slug);
-        repository.save(category);
-    }
-
-    public void save(Category category) {
-        repository.save(category);
     }
 
     public void handelRedirectMessagesOnSuccess(RedirectAttributes redirectAttributes, String successMessage){
@@ -89,4 +73,30 @@ public class CategoryService {
         redirectAttributes.addFlashAttribute("categoryInfo", category);
     }
 
+    public void reorder(int[] ids) {
+        int count = 1;
+        Category category;
+
+        for(int pageId : ids){
+            category = findById(pageId);
+            category.setSorting(count++);
+            save(category);
+        }
+    }
+
+    private void saveFormCategory(Category category, String categoryName){
+        String slug = setSlugUsingCategoryName(categoryName,category);
+        category.setSlug(slug);
+        repository.save(category);
+    }
+
+    private void save(Category category) {
+        repository.save(category);
+    }
+
+    private String setSlugUsingCategoryName(String slug, Category category) {
+        if (slug.trim().length() == 0)
+            return category.getName().toLowerCase().replace(" ", "-");
+        return slug.toLowerCase().replace(" ", "-");
+    }
 }

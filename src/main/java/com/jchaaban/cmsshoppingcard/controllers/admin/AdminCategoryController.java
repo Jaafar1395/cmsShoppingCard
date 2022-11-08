@@ -89,15 +89,7 @@ public class AdminCategoryController {
     @PostMapping("/reorder")
     public @ResponseBody
     String reorder(@RequestParam("id[]") int [] ids){
-        int count = 1;
-        Category category;
-
-        for(int pageId : ids){
-            category = categoryService.findById(pageId);
-            category.setSorting(count++);
-            categoryService.save(category);
-        }
-
+        categoryService.reorder(ids);
         return "OK";
     }
 }
