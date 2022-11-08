@@ -18,7 +18,7 @@ public class CardService {
 
     public void updateCardStatus(HttpSession session, Model model){
 
-        int cardSize = 0, cardTotal = 0;
+        double cardSize = 0, cardTotal = 0;
 
         HashMap<Integer, CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
 

@@ -22,10 +22,7 @@
                         <p th:text="'$' + ${product.price}"></p>
                         <div style="position: relative;">
                             <p>
-                                <a class="btn btn-primary addToCart"
-                                   th:attr="data-id=${product.id}"
-                                   th:href="@{'/cart/add/' + ${product.id}}">Add to cart</a>
-                                <img class="ajaxLoader d-none" src="/images/ajax-loader.gif">
+                                <a class="btn btn-primary addToCard" th:attr="data-id=${product.id}">Add to card</a>
                             </p>
                             <div class="btn btn-sm btn-success hide productAdded">Product added</div>
                         </div>
@@ -41,14 +38,14 @@
     <div th:replace="/fragments/footer"></div>
 
     <script>
-        $("a.addToCart").click(function (e){
+        $("a.addToCard").click(function (e){
             e.preventDefault();
             let $this = $(this);
             $this.next().removeClass("d-none");
             let id = $this.attr("data-id");
             let url = "/card/add/" + id;
-            $.get(url,{}, function (data){
-                $("div.cart").html(data);
+            $.get(url,{}, function (data) {
+                $("div.card").html(data);
             }).done(function (){
                $this.parent().parent().find("div.productAdded").fadeIn();
                $this.next().addClass("d-none");

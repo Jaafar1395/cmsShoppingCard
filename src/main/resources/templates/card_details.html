@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="/fragments/head"></head>
+
+<body>
+
+<nav th:replace="/fragments/nav :: nav-front"></nav>
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div th:replace="/fragments/categories"></div>
+        <div class="col"></div>
+        <div class="col-7">
+            <h2 class="display-4">Cart Overview</h2>
+            <table class="table">
+                <tr>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+                <tr th:each="element: ${card}">
+                    <td th:text="${element.value.name}"></td>
+                    <td>
+                        <img style="width: 100px;" th:src="@{${element.value.imagePath}}" />
+                    </td>
+                    <td>
+                        <span th:class="${element.value.id} + '_quantity'" th:text="${element.value.quantity}"></span>
+                        <a th:attr="data-id=${element.value.id}" class="btn btn-success btn-sm incrementQuantity">+</a>
+
+                        <a th:href="@{'/card/subtract/'+${element.value.id}}" class="btn btn-primary btn-sm">-</a>
+                        <a th:href="@{'/card/remove/'+${element.value.id}}" class="btn btn-danger btn-sm">remove</a>
+                    </td>
+                    <td th:class="${element.value.id} + '_price'" th:text="'$' + ${element.value.price}"></td>
+
+                    <td th:class="${element.value.id} + '_subTotal' "
+                        th:with="formattedTotal=${element.value.price} * ${element.value.quantity}"
+                        th:text="'$' + ${#numbers.formatDecimal(formattedTotal,3,'COMMA',2,'POINT')}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="4"><b>Grand Total:</b></td>
+                    <td colspan="1" class="grandTotal" th:text="'$' + ${#numbers.formatDecimal(cardTotal,3,'COMMA',2,'POINT')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <a th:href="@{'/card/clear'}"  class="btn btn-danger">Clear Card</a>
+                    </td>
+                    <td colspan="4">
+                        <a href="#"  class="btn btn-success checkout">Checkout</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer"></div>
+
+<script>
+
+        function toFloat(strPrice){
+            strPrice = strPrice.replace(/[^\d.]/g, '');
+            var lastPeriod = strPrice.lastIndexOf('.');
+
+            let integerPart = strPrice.substring(0, lastPeriod);
+
+            integerPart = parseFloat(integerPart);
+
+            let fractionalPart = strPrice.substring(strPrice.length - (strPrice.length - lastPeriod - 1));
+
+            let divideOneMoreTime = fractionalPart.charAt(0) === '0';
+
+            fractionalPart = parseFloat(fractionalPart);
+
+            while (fractionalPart > 1)
+                fractionalPart /= 10;
+
+            if (divideOneMoreTime)
+                fractionalPart /= 10;
+
+            return integerPart + fractionalPart;
+        }
+
+
+        function incrementPrices(id){
+            let quantitySpan = $("." + id + "_quantity");
+            let currentQuantity = parseInt(quantitySpan.html());
+            quantitySpan.html(++currentQuantity);
+
+            let priceSpan = $("." + id + "_price");
+            let price = toFloat(priceSpan.html());
+
+            let subTotal = $("." + id + "_subTotal");
+            let currentSubPrice = toFloat(subTotal.html());
+
+            let dollarUS = Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+            });
+
+            subTotal.html(dollarUS.format(currentSubPrice + price));
+
+            let grandTotal = $(".grandTotal");
+            let currentGrandTotal = toFloat(grandTotal.html());
+
+            grandTotal.html(dollarUS.format(currentGrandTotal + price));
+        }
+
+        $("a.incrementQuantity").click(function (e){
+        e.preventDefault();
+        let $this = $(this);
+        let id = $this.attr("data-id");
+        let url = "/card/add/" + id;
+        $.get(url,{}, function () {
+            incrementPrices(id);
+        });
+    });
+</script>
+
+</body>
+
+</html>

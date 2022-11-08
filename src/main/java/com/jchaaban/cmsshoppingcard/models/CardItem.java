@@ -11,13 +11,15 @@ public class CardItem {
     private int quantity;
     private String imagePath;
 
-    public CardItem(Integer id, String name, String price, int quantity, String image) {
+    public CardItem(Integer id, String name, String price, int quantity, String imagePath) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.imagePath = image;
+        this.imagePath = imagePath;
     }
+
+
 
     public void incrementQuantity(){++quantity;}
 }
