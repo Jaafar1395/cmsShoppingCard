@@ -32,10 +32,8 @@ public class CardController {
 
         cardService.add(id,session,model);
 
-        if (cardPage != null) {
-            System.out.println("we are here");
-            return "redirect:/card/details";
-        }
+        if (cardPage != null) return "redirect:/card/details";
+
 
         return "card_view";
     }
@@ -59,6 +57,22 @@ public class CardController {
 
         return "redirect:" + referLink;
     }
+
+    @GetMapping("/remove/{id}")
+    public String remove(@PathVariable Integer id, HttpSession session, HttpServletRequest servletRequest){
+
+        HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
+        card.remove(id);
+
+        if (card.size() == 0)
+            session.removeAttribute("cart");
+
+
+        String referLink = servletRequest.getHeader("referer");
+
+        return "redirect:" + referLink;
+    }
+
 
     @GetMapping("/details")
     public String cardDetails(HttpSession session, Model model){

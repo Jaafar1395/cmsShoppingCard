@@ -32,7 +32,8 @@
 
                         <a th:href="@{'/card/subtract/'+${element.value.id}}" th:attr="data-id=${element.value.id}"
                            class="btn btn-primary btn-sm decrementQuantity">-</a>
-                        <a th:href="@{'/card/remove/'+${element.value.id}}" class="btn btn-danger btn-sm">remove</a>
+                        <a th:attr="data-id=${element.value.id}" th:href="@{'/card/remove/'+${element.value.id}}"
+                           class="btn btn-danger btn-sm remove">remove</a>
                     </td>
                     <td th:class="${element.value.id} + '_price'" th:text="'$' + ${element.value.price}"></td>
 
@@ -136,6 +137,33 @@
         let url = "/card/subtract/" + id;
         $.get(url, {}, function () {
             updatePrices(id,false);
+        });
+    });
+
+    $("a.remove").click(function (e) {
+        e.preventDefault();
+        let $this = $(this);
+        let id = $this.attr("data-id");
+        let url = "/card/remove/" + id;
+        $.get(url, {}, function () {
+            let subTotal = $("." + id + "_subTotal");
+            let currentSubPrice = toFloat(subTotal.html());
+
+            let dollarUS = Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+            });
+
+            let grandTotal = $(".grandTotal");
+            let currentGrandTotal = toFloat(grandTotal.html());
+            currentGrandTotal = currentGrandTotal - currentSubPrice;
+
+            subTotal.closest('tr').remove();
+
+            if (currentGrandTotal === 0)
+                window.location.replace("/category/all");
+            else
+                grandTotal.html(dollarUS.format(currentGrandTotal));
         });
     });
 </script>
