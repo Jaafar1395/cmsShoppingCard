@@ -1,5 +1,5 @@
-<div class="bg-dark text-white p-3 mt-3" th:fragments="card" th:if="${checkoutDetailsPage == null}">
-    <div th:if="${session.containsKey('card')}" class="card cartActive">
+<div th:fragments="card" th:if="${checkoutDetailsPage == null}">
+    <div th:if="${session.containsKey('card')}" class="card cartActive bg-dark text-white p-3 mt-3">
         <div th:replace="/fragments/cardInfo.html :: cardInfo"></div>
     </div>
     <div class="card cartInactive" th:unless="${session.containsKey('card')}">
