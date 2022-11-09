@@ -41,17 +41,7 @@ public class CardController {
     @GetMapping("/subtract/{id}")
     public String subtract(@PathVariable Integer id, HttpSession session, HttpServletRequest servletRequest){
 
-        Product product = productService.findById(id);
-        HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
-        int quantity = card.get(id).getQuantity();
-        if (quantity == 1){
-            card.remove(id);
-            if (card.size() == 0){
-                session.removeAttribute("cart");
-            }
-        } else {
-            card.put(id,new CardItem(product.getId(),product.getName(),product.getPrice(), --quantity,product.getImagePath()));
-        }
+        cardService.subtract(id,session);
 
         String referLink = servletRequest.getHeader("referer");
 
@@ -61,11 +51,7 @@ public class CardController {
     @GetMapping("/remove/{id}")
     public String remove(@PathVariable Integer id, HttpSession session, HttpServletRequest servletRequest){
 
-        HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
-        card.remove(id);
-
-        if (card.size() == 0)
-            session.removeAttribute("card");
+        cardService.remove(id,session);
 
         String referLink = servletRequest.getHeader("referer");
 
