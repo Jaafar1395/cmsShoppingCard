@@ -23,8 +23,6 @@ public class CardController {
 
     @Autowired
     private CardService cardService;
-    @Autowired
-    private ProductService productService;
 
     @GetMapping("/add/{id}")
     public String add(@PathVariable Integer id, HttpSession session, Model model,
