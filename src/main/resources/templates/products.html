@@ -47,13 +47,23 @@
             $.get(url,{}, function (data) {
                 $("div.card").html(data);
             }).done(function (){
+                // ---------------
                $this.parent().parent().find("div.productAdded").fadeIn();
                $this.next().addClass("d-none");
                 setTimeout(() => {
                     $this.parent().parent().find("div.productAdded").fadeOut();
-               }, 1000);
+                }, 1000);
+
+                // ---------------
+                $("span.clearCard").click(function (){
+                    let url = "/card/clear?cardPage=true";
+                    $.get(url,{}, function () {
+                        $("div.card").html('<p class="block m-2">Yor card has been cleared</p>');
+                    });
+                });
             });
         });
+
     </script>
 
 </body>

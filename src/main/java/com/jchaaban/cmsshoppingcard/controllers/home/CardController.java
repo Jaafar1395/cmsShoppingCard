@@ -65,12 +65,24 @@ public class CardController {
         card.remove(id);
 
         if (card.size() == 0)
-            session.removeAttribute("cart");
+            session.removeAttribute("card");
 
 
         String referLink = servletRequest.getHeader("referer");
 
         return "redirect:" + referLink;
+    }
+
+    @GetMapping("/clear")
+    public String clear(HttpSession session, HttpServletRequest servletRequest,
+                        @RequestParam(name = "cardPage", required = false) String cardPage){
+
+        session.removeAttribute("card");
+
+        if (cardPage != null)
+            return "card_view";
+
+        return "redirect:/category/all";
     }
 
 

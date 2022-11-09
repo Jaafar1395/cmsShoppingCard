@@ -2,7 +2,7 @@
     <div th:if="${session.containsKey('card')}" class="card cartActive">
         <div th:replace="/fragments/cardInfo.html :: cardInfo"></div>
     </div>
-    <div class="cart cartInactive" th:unless="${session.containsKey('card')}">
+    <div class="card cartInactive" th:unless="${session.containsKey('card')}">
         <p>Your card is empty.</p>
     </div>
 </div>

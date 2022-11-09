@@ -88,6 +88,18 @@
         return integerPart + fractionalPart;
     }
 
+    const dollarUS = Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    });
+
+    function updateGradTotal(incrementMode,quantitySpan, currentQuantity, price){
+        let grandTotal = $(".grandTotal");
+        let currentGrandTotal = toFloat(grandTotal.html());
+        currentGrandTotal = (incrementMode === true) ? (currentGrandTotal + price) : (currentGrandTotal - price);
+        grandTotal.html(dollarUS.format(currentGrandTotal));
+        return currentGrandTotal;
+    }
 
     function updatePrices(id,incrementMode) {
         let quantitySpan = $("." + id + "_quantity");
@@ -100,17 +112,9 @@
         let subTotal = $("." + id + "_subTotal");
         let currentSubPrice = toFloat(subTotal.html());
 
-        let dollarUS = Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-        });
-
         subTotal.html(dollarUS.format((incrementMode === true) ? (currentSubPrice + price) : (currentSubPrice - price)));
 
-        let grandTotal = $(".grandTotal");
-        let currentGrandTotal = toFloat(grandTotal.html());
-        currentGrandTotal = (incrementMode === true) ? (currentGrandTotal + price) : (currentGrandTotal - price);
-        grandTotal.html(dollarUS.format(currentGrandTotal));
+        currentGrandTotal = updateGradTotal(incrementMode,quantitySpan,currentQuantity,price);
 
         if (currentQuantity === 0)
             quantitySpan.closest('tr').remove();
@@ -148,12 +152,6 @@
         $.get(url, {}, function () {
             let subTotal = $("." + id + "_subTotal");
             let currentSubPrice = toFloat(subTotal.html());
-
-            let dollarUS = Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            });
-
             let grandTotal = $(".grandTotal");
             let currentGrandTotal = toFloat(grandTotal.html());
             currentGrandTotal = currentGrandTotal - currentSubPrice;
