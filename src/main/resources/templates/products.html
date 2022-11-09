@@ -57,8 +57,8 @@
                 // ---------------
                 $("span.clearCard").click(function (){
                     let url = "/card/clear?cardPage=true";
-                    $.get(url,{}, function () {
-                        $("div.card").html('<p class="block m-2">Yor card has been cleared</p>');
+                    $.get(url,{}, function (data) {
+                        $("div.card").html(data);
                     });
                 });
             });
