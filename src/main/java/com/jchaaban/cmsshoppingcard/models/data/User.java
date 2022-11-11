@@ -31,7 +31,6 @@ public class User implements UserDetails {
     @Size(min = 2,message = "Password must be at least 4 characters long")
     private String password;
 
-
     @Transient // not part of the table
     private String confirmPassword;
 
@@ -39,7 +38,7 @@ public class User implements UserDetails {
     @Pattern(regexp = "^([0-9]{15}|9)$", message = "The phone number must be at least 9 digits long")
     private String phoneNumber;
 
-    @Email(message = "Please enter a valid email")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "please enter a valid email")
     private String email;
 
 
