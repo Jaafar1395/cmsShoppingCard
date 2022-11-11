@@ -31,6 +31,7 @@ public class User implements UserDetails {
     @Size(min = 2,message = "Password must be at least 4 characters long")
     private String password;
 
+
     @Transient // not part of the table
     private String confirmPassword;
 
