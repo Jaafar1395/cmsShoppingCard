@@ -1,9 +1,7 @@
 package com.jchaaban.cmsshoppingcard.controllers.home;
 
-import com.jchaaban.cmsshoppingcard.models.CardItem;
-import com.jchaaban.cmsshoppingcard.models.data.Product;
+import com.jchaaban.cmsshoppingcard.models.data.CardItem;
 import com.jchaaban.cmsshoppingcard.services.CardService;
-import com.jchaaban.cmsshoppingcard.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

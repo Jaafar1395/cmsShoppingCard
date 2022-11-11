@@ -1,6 +1,5 @@
 package com.jchaaban.cmsshoppingcard.controllers;
 
-import com.jchaaban.cmsshoppingcard.models.CardItem;
 import com.jchaaban.cmsshoppingcard.models.PageRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Page;

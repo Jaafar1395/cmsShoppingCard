@@ -1,4 +1,4 @@
-package com.jchaaban.cmsshoppingcard.models;
+package com.jchaaban.cmsshoppingcard.models.data;
 
 import lombok.Data;
 
