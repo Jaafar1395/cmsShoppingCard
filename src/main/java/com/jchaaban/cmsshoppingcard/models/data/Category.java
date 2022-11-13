@@ -24,7 +24,7 @@ public class Category {
 
     private int sorting;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "category")
     private Set<Product> products;
 
 }
