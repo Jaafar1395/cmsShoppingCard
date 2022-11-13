@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @ControllerAdvice
@@ -27,7 +28,11 @@ public class CommonController {
     private CardService cardService;
 
     @ModelAttribute
-    public void sharedData(HttpSession session, Model model) {
+    public void sharedData(HttpSession session, Model model, Principal principal) {
+
+        if (principal != null)
+            model.addAttribute("principal", principal.getName());
+
         List<Category> categories = categoryService.findAllByOrderBySortingAsc();
         List<Page> pages = pageRepository.findAllByOrderBySortingAsc();
 

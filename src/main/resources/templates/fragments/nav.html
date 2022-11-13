@@ -6,6 +6,21 @@
                 <a class="nav-link" th:href="@{'/' + ${page.slug}}" th:text="${page.title}"></a>
             </li>
         </ul>
+
+        <ul class="float-right navbar-nav" th:if="${principal == null}">
+            <li class="nav-item active">
+                <a th:href="@{'/register'}" class="nav-link">Register</a>
+            </li>
+            <li class="nav-item active">
+                <a th:href="@{'/login'}" class="nav-link">Login</a>
+            </li>
+        </ul>
+
+        <form th:if="${principal != null}" th:action="@{'/logout'}" method="post">
+            <span class="text-white mr-3" th:text="${'Hi ' + principal}"></span>
+            <button class="btn btn-secondary">Logout</button>
+        </form>
+
     </div>
 </nav>
 
@@ -23,5 +38,10 @@
                 <a class="nav-link" href="/admin/products">Products</a>
             </li>
         </ul>
+
+        <form th:if="${principal != null}" th:action="@{'/logout'}" method="post">
+            <span class="text-white mr-3" th:text="${'Hi ' + principal}"></span>
+            <button class="btn btn-secondary">Logout</button>
+        </form>
     </div>
 </nav>
