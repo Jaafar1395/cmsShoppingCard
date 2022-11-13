@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -66,17 +67,18 @@ public class ProductService {
     public void deleteProduct(Integer id) throws IOException {
         Product product = repository.findById(id).get();
         repository.deleteById(id);
-        FileUploadUtil.deleteFile("media/" + product.getCategoryName(), product.getImage());
+        FileUploadUtil.deleteFile("media", product.getImage());
     }
 
     public void saveNewProduct(Product product,
                                MultipartFile file,
                                String filename, String slug,
                                RedirectAttributes attributes) throws IOException {
+        String imageStoredName = UUID.randomUUID() + "--" + filename;
         product.setSlug(slug);
-        product.setImage(filename);
-        String uploadDirectory = "media/" + product.getCategoryName();
-        FileUploadUtil.saveFile(uploadDirectory, filename, file);
+        product.setImage(imageStoredName);
+        String uploadDirectory = "media";
+        FileUploadUtil.saveFile(uploadDirectory, imageStoredName, file);
         handelSuccessOperation(product,"Product was successfully added",attributes);
         repository.save(product);
     }
@@ -85,14 +87,14 @@ public class ProductService {
                                   String filename, String slug, boolean newFileUploaded,
                                   RedirectAttributes attributes) throws IOException {
         product.setSlug(slug);
-        product.setImage(filename);
-        String oldProductCategoryName = oldProduct.getCategoryName();
-        String productCategoryName = product.getCategoryName();
-        String uploadDirectory = "media/" + productCategoryName;
-        if (newFileUploaded || oldProductCategoryName != productCategoryName) {
-            FileUploadUtil.saveFile(uploadDirectory, filename, file);
-            FileUploadUtil.deleteFile("media/" + oldProductCategoryName, oldProduct.getImage());
-        }
+        String uploadDirectory = "media";
+        if (newFileUploaded) {
+            String imageStoredName = UUID.randomUUID() + "--" + filename;
+            product.setImage(imageStoredName);
+            FileUploadUtil.saveFile(uploadDirectory,imageStoredName, file);
+            FileUploadUtil.deleteFile(uploadDirectory, oldProduct.getImage());
+        } else
+            product.setImage(oldProduct.getImage());
         handelSuccessOperation(null, "Product was successfully edited",attributes);
         repository.save(product);
     }

@@ -53,7 +53,7 @@ public class Product {
 
 
     public String getImagePath() {
-        return "/media/" + category.getName() + "/" + image;
+        return "/media/" + image;
     }
 
     public String getCategoryName() {

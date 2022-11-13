@@ -90,7 +90,7 @@
 
     function toFloat(strPrice) {
         strPrice = strPrice.replace(/[^\d.]/g, '');
-        var lastPeriod = strPrice.lastIndexOf('.');
+        const lastPeriod = strPrice.lastIndexOf('.');
 
         let integerPart = strPrice.substring(0, lastPeriod);
 
