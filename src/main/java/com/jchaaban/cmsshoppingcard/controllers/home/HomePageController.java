@@ -43,7 +43,6 @@ public class HomePageController {
     public String login(){
         if (isAuthenticated())
             return "redirect:/";
-
         return "login";
     }
 

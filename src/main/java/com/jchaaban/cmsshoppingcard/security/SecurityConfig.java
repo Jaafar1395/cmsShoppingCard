@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.security;
 
+import com.jchaaban.cmsshoppingcard.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,21 +20,21 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired private LoginSuccessHandler loginSuccessHandler;
+
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/resources/**", "/media/**", "/", "/category/**", "/register", "/login").permitAll()
+                .antMatchers( "/", "/category/**", "/register", "/login").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin() // (5)
-                .loginPage("/login") // (5)
+                .loginPage("/login").successHandler(loginSuccessHandler) // (5)
                 .permitAll()
-                .defaultSuccessUrl("/", true)
                 .and()
                 .logout() // (6)
                 .permitAll()
@@ -42,7 +43,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 
     @Bean
@@ -54,8 +54,5 @@ public class SecurityConfig {
     public PasswordEncoder encoder(){
             return new BCryptPasswordEncoder();
     }
-
-
-
 
 }
