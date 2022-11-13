@@ -38,6 +38,16 @@
     <div th:replace="/fragments/footer"></div>
 
     <script>
+
+        function addClearCardFunctionality(){
+            $("#clearCard").click(function (){
+                let url = "/card/clear?cardPage=true";
+                $.get(url,{}, function (data) {
+                    $("div.card").html(data);
+                });
+            });
+        }
+
         $("a.addToCard").click(function (e){
             e.preventDefault();
             let $this = $(this);
@@ -54,15 +64,11 @@
                     $this.parent().parent().find("div.productAdded").fadeOut();
                 }, 1000);
 
-                // ---------------
-                $("span.clearCard").click(function (){
-                    let url = "/card/clear?cardPage=true";
-                    $.get(url,{}, function (data) {
-                        $("div.card").html(data);
-                    });
-                });
+                addClearCardFunctionality();
             });
         });
+
+        addClearCardFunctionality();
 
     </script>
 
