@@ -27,8 +27,7 @@ public class RegistrationController {
 
 
     @PostMapping
-    public String register(@Valid User user, BindingResult bindingResult, Model model)
-            throws IOException {
+    public String register(@Valid User user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors())
             return "register";
@@ -40,6 +39,11 @@ public class RegistrationController {
 
         if (userService.emailExist(user,false)) {
             model.addAttribute("existingEmailProblem","The email you entered is already used");
+            return "register";
+        }
+
+        if (userService.usernameExist(user,false)) {
+            model.addAttribute("existingUsernameProblem","The username you entered is already used");
             return "register";
         }
 

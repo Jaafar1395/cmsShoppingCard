@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private String confirmPassword;
 
     @Column(name = "phone_number")
-    @Pattern(regexp = "^([0-9]{15}|9)$", message = "The phone number must be at least 9 digits long")
+    @Pattern(regexp = "^[0-9]{3}-[0-9]{3}-[0-9]{4}$", message = "The phone number must be at least 9 digits long")
     private String phoneNumber;
 
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "please enter a valid email")
