@@ -27,13 +27,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll();
-//                .antMatchers("/**").hasAnyRole("USER");
-
-//        same results with different approach
-//        http.authorizeRequests()
-//                .antMatchers("/").access("permitAll").
-//                antMatchers("/**").access("hasRole('ROLE_USER')");
+                .antMatchers("/resources/**", "/media/**", "/", "/category/**", "/register", "/login").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
+                .formLogin() // (5)
+                .loginPage("/login") // (5)
+                .permitAll()
+                .defaultSuccessUrl("/", true)
+                .and()
+                .logout() // (6)
+                .permitAll()
+                .and()
+                .httpBasic();
 
         return http.build();
     }

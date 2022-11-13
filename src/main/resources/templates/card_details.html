@@ -57,8 +57,13 @@
                     <td>
                         <a th:href="@{'/card/clear'}" class="btn btn-danger">Clear Card</a>
                     </td>
-                    <td colspan="4">
+
+                    <td colspan="4" sec:authorize="isAuthenticated()">
                         <a href="#" class="btn btn-success checkout">Checkout</a>
+                    </td>
+
+                    <td colspan="4" sec:authorize="isAnonymous()">
+                        <a th:href="@{'/login'}" class="btn btn-success">Login to checkout</a>
                     </td>
                 </tr>
             </table>
