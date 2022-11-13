@@ -57,7 +57,6 @@
             $.get(url,{}, function (data) {
                 $("div.card").html(data);
             }).done(function (){
-                // ---------------
                $this.parent().parent().find("div.productAdded").fadeIn();
                $this.next().addClass("d-none");
                 setTimeout(() => {
