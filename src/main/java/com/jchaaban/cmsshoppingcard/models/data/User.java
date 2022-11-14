@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -41,10 +42,16 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "please enter a valid email")
     private String email;
 
+    private boolean isAdmin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        List<SimpleGrantedAuthority> authorities = new LinkedList<>();
+        if (isAdmin)
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        else
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
     }
 
     @Override

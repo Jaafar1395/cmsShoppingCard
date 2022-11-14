@@ -46,7 +46,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/images/**", "media/**", "/js/**", "/webjars/**");
     }
 

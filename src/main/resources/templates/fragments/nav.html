@@ -5,6 +5,9 @@
             <li class="nav-item active" th:each="page: ${commonPages}"  th:if="${page.slug != 'home'}">
                 <a class="nav-link" th:href="@{'/' + ${page.slug}}" th:text="${page.title}"></a>
             </li>
+            <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-item active">
+                <a th:href="@{'/admin/products'}" class="nav-link">Admin page</a>
+            </li>
         </ul>
 
         <ul class="float-right navbar-nav" th:if="${principal == null}">
@@ -15,6 +18,7 @@
                 <a th:href="@{'/login'}" class="nav-link">Login</a>
             </li>
         </ul>
+
 
         <form th:if="${principal != null}" th:action="@{'/logout'}" method="post">
             <span class="text-white mr-3" th:text="${'Hi ' + principal}"></span>
