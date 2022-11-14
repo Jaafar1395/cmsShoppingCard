@@ -59,7 +59,7 @@
                     </td>
 
                     <td colspan="4" sec:authorize="isAuthenticated()">
-                        <a href="#" class="btn btn-success checkout">Checkout</a>
+                        <span class="btn btn-success checkout">Checkout</span>
                     </td>
 
                     <td colspan="4" sec:authorize="isAnonymous()">
@@ -79,11 +79,13 @@
 
 <script>
 
-    $("a.checkout").click(function (e) {
+    $("span.checkout").click(function (e) {
         e.preventDefault();
         $("div.overlay").removeClass("d-none");
-        $.get("/card/clear", {}, function () {});
-        $("form#paypalForm").submit();
+        $.get("/order/add", {}, function () {
+        }).done(function (){
+            $("form#paypalForm").submit();
+        });
     });
 
 

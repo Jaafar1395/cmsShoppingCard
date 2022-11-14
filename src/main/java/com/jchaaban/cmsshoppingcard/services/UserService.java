@@ -43,4 +43,9 @@ public class UserService {
         user.setAddress(address);
         userRepository.save(user);
     }
+
+    public User getUserHavingUsername(String username) {
+        System.out.println("username " + username);
+        return userRepository.findByUsername(username);
+    }
 }
