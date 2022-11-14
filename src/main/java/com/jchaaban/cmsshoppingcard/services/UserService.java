@@ -1,6 +1,7 @@
 package com.jchaaban.cmsshoppingcard.services;
 
 import com.jchaaban.cmsshoppingcard.models.UserRepository;
+import com.jchaaban.cmsshoppingcard.models.data.Address;
 import com.jchaaban.cmsshoppingcard.models.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,9 +37,10 @@ public class UserService {
         return false;
     }
 
-    public void saveNewUser(User user) {
+    public void saveNewUser(User user, Address address) {
         user.setAdmin(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAddress(address);
         userRepository.save(user);
     }
 }

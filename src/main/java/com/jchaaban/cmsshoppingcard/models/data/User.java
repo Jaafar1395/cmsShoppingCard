@@ -45,6 +45,8 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // delete orders when customer gets deleted
+    private Set<Order> orders = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
