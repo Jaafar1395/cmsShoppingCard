@@ -14,12 +14,7 @@ import java.util.Set;
 @Table(name = "orders")
 @Getter
 @Setter
-public class Order {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Order extends IDBasedEntity {
 
     @Column(name = "order_tracking_number")
     private String orderTrackingNumber;

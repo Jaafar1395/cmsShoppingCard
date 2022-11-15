@@ -1,13 +1,11 @@
 package com.jchaaban.cmsshoppingcard.models.data;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.*;
@@ -15,18 +13,14 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 @Data
-public class User implements UserDetails {
+public class User extends IDBasedEntity implements UserDetails {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     @Size(min = 2,message = "Username must be at least 2 characters long")
     private String username;
 
-    @Size(min = 2,message = "Password must be at least 4 characters long")
+    @Size(min = 4,message = "Password must be at least 4 characters long")
     private String password;
 
     @Transient // not part of the table

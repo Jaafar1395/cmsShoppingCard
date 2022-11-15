@@ -4,18 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_item")
 @Getter
 @Setter
-public class OrderItem {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class OrderItem extends IDBasedEntity {
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -32,6 +26,8 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public OrderItem() {}
 
     public OrderItem(Integer productId, String price, int quantity, String imagePath) {
         this.productId = productId;

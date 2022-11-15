@@ -12,12 +12,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Getter
 @Setter
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+public class Address extends IDBasedEntity {
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 10, message = "Street must be at least 15 characters long")

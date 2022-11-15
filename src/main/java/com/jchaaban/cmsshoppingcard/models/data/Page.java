@@ -10,11 +10,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "pages")
 @Data
-public class Page {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Page extends IDBasedEntity {
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 2, message = "Title must be at least 2 characters long")

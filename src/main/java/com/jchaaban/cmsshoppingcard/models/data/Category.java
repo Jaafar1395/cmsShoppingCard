@@ -10,11 +10,8 @@ import java.util.Set;
 @Table(name = "categories")
 @Entity
 @Data
-public class Category {
+public class Category extends IDBasedEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     @NotBlank(message = "This filed cannot be empty")
     @Size(min = 2, message = "Name must be at least 2 characters long")

@@ -4,6 +4,7 @@ import com.jchaaban.cmsshoppingcard.models.data.CardItem;
 import com.jchaaban.cmsshoppingcard.models.data.Order;
 import com.jchaaban.cmsshoppingcard.models.data.OrderItem;
 import com.jchaaban.cmsshoppingcard.models.data.User;
+import com.jchaaban.cmsshoppingcard.services.EmailService;
 import com.jchaaban.cmsshoppingcard.services.OrderService;
 import com.jchaaban.cmsshoppingcard.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
@@ -29,10 +31,11 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/add")
-    public String add(Order order, HttpSession session, Principal principal){
-        System.out.println("we are hereeeeeeeeeeeeeere");
+    public String add(Order order, HttpSession session, Principal principal) throws MessagingException {
 
         User user = userService.getUserHavingUsername(principal.getName());
         order.setUser(user);
@@ -55,6 +58,7 @@ public class OrderController {
 
         session.removeAttribute("card");
 
+        emailService.sendEmailWithFileAttachment(user.getUsername(), user.getEmail());
 
         return "redirect:/category/all";
     }
