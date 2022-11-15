@@ -41,17 +41,17 @@
                         <a th:attr="data-id=${element.value.id}" th:href="@{'/card/remove/'+${element.value.id}}"
                            class="btn btn-danger btn-sm remove">remove</a>
                     </td>
-                    <td th:class="${element.value.id} + '_price'" th:text="'$' + ${element.value.price}"></td>
+                    <td th:class="${element.value.id} + '_price'" th:text="'€' + ${element.value.price}"></td>
 
                     <td th:class="${element.value.id} + '_subTotal' "
                         th:with="formattedTotal=${element.value.price} * ${element.value.quantity}"
-                        th:text="'$' + ${#numbers.formatDecimal(formattedTotal,3,'COMMA',2,'POINT')}">
+                        th:text="'€' + ${#numbers.formatDecimal(formattedTotal,2,'COMMA',2,'POINT')}">
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right" colspan="4"><b>Grand Total:</b></td>
                     <td colspan="1" class="grandTotal"
-                        th:text="'$' + ${#numbers.formatDecimal(cardTotal,3,'COMMA',2,'POINT')}"></td>
+                        th:text="'€' + ${#numbers.formatDecimal(cardTotal,2,'COMMA',2,'POINT')}"></td>
                 </tr>
                 <tr>
                     <td>
@@ -88,74 +88,42 @@
         });
     });
 
-
-
-    function toFloat(strPrice) {
-        strPrice = strPrice.replace(/[^\d.]/g, '');
-        const lastPeriod = strPrice.lastIndexOf('.');
-
-        let integerPart = strPrice.substring(0, lastPeriod);
-
-        integerPart = parseFloat(integerPart);
-
-        let fractionalPart = strPrice.substring(strPrice.length - (strPrice.length - lastPeriod - 1));
-
-        let divideOneMoreTime = fractionalPart.charAt(0) === '0';
-
-        fractionalPart = parseFloat(fractionalPart);
-
-        while (fractionalPart > 1)
-            fractionalPart /= 10;
-
-        if (divideOneMoreTime)
-            fractionalPart /= 10;
-
-        return integerPart + fractionalPart;
-    }
-
-    const dollarUS = Intl.NumberFormat("en-US", {
+    const euroEU = Intl.NumberFormat("en-DE", {
         style: "currency",
-        currency: "USD",
+        currency: "EUR",
     });
 
-    function updateGradTotal(incrementMode,quantitySpan, currentQuantity, price){
-        let grandTotal = $(".grandTotal");
-        let currentGrandTotal = toFloat(grandTotal.html());
-        currentGrandTotal = (incrementMode === true) ? (currentGrandTotal + price) : (currentGrandTotal - price);
-        grandTotal.html(dollarUS.format(currentGrandTotal));
-        return currentGrandTotal;
-    }
+    function updatePrices(id,data,incrementMode) {
 
-    function updatePrices(id,incrementMode) {
+        let productQuantity = data.productQuantity;
+        let cardTotal = data.cardTotal;
+        let productTotalPrice = data.productTotalPrice;
+
         let quantitySpan = $("." + id + "_quantity");
-        let currentQuantity = parseInt(quantitySpan.html());
-        quantitySpan.html((incrementMode === true) ? ++currentQuantity : --currentQuantity);
 
-        let priceSpan = $("." + id + "_price");
-        let price = toFloat(priceSpan.html());
+        quantitySpan.html(productQuantity);
 
         let subTotal = $("." + id + "_subTotal");
-        let currentSubPrice = toFloat(subTotal.html());
+        subTotal.html(euroEU.format(productTotalPrice));
 
-        subTotal.html(dollarUS.format((incrementMode === true) ? (currentSubPrice + price) : (currentSubPrice - price)));
+        let grandTotal = $(".grandTotal");
+        grandTotal.html(euroEU.format(cardTotal));
 
-        currentGrandTotal = updateGradTotal(incrementMode,quantitySpan,currentQuantity,price);
-
-        if (currentQuantity === 0)
-            quantitySpan.closest('tr').remove();
-
-        if (currentGrandTotal === 0)
-            window.location.replace("/category/all");
-
+        if (!incrementMode) {
+            if (productQuantity === 0)
+                quantitySpan.closest('tr').remove();
+            if (cardTotal === 0)
+                window.location.replace("/category/all");
+        }
     }
 
     $("a.incrementQuantity").click(function (e) {
         e.preventDefault();
         let $this = $(this);
         let id = $this.attr("data-id");
-        let url = "/card/add/" + id;
-        $.get(url, {}, function () {
-            updatePrices(id,true);
+        let url = "/card/json/add/" + id;
+        $.get(url, {}, function (data) {
+            updatePrices(id,data,true);
         });
     });
 
@@ -163,9 +131,9 @@
         e.preventDefault();
         let $this = $(this);
         let id = $this.attr("data-id");
-        let url = "/card/subtract/" + id;
-        $.get(url, {}, function () {
-            updatePrices(id,false);
+        let url = "/card/json/subtract/" + id;
+        $.get(url, {}, function (data) {
+            updatePrices(id,data,false);
         });
     });
 
@@ -173,22 +141,20 @@
         e.preventDefault();
         let $this = $(this);
         let id = $this.attr("data-id");
-        let url = "/card/remove/" + id;
-        $.get(url, {}, function () {
+        let url = "/card/json/remove/" + id;
+        $.get(url, {}, function (data) {
             let subTotal = $("." + id + "_subTotal");
-            let currentSubPrice = toFloat(subTotal.html());
+            let cardTotal = data.cardTotal;
             let grandTotal = $(".grandTotal");
-            let currentGrandTotal = toFloat(grandTotal.html());
-            currentGrandTotal = currentGrandTotal - currentSubPrice;
-
             subTotal.closest('tr').remove();
 
-            if (currentGrandTotal === 0)
+            if (cardTotal === 0)
                 window.location.replace("/category/all");
             else
-                grandTotal.html(dollarUS.format(currentGrandTotal));
+                grandTotal.html(euroEU.format(cardTotal));
         });
     });
+
 </script>
 
 </body>

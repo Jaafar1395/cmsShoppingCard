@@ -5,7 +5,6 @@ import com.jchaaban.cmsshoppingcard.models.data.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -33,6 +32,34 @@ public class CardService {
 
     }
 
+    public double getCardTotal(HashMap<Integer, CardItem> card){
+        double cardTotal = 0;
+
+        for (CardItem cardItem : card.values())
+            cardTotal+= cardItem.getQuantity() * Double.parseDouble(cardItem.getPrice());
+
+
+        return cardTotal;
+    }
+
+    public void incrementProductAmount(HashMap<Integer,CardItem> card,Integer id){
+        card.get(id).incrementQuantity();
+    }
+
+    public double getProductTotalPrice(HashMap<Integer,CardItem> card,Integer id){
+        CardItem cardItem = card.get(id);
+        return cardItem.getQuantity() * Double.parseDouble(cardItem.getPrice());
+    }
+
+    public int getProductQuantity(HashMap<Integer,CardItem> card,Integer id){
+        CardItem cardItem = card.get(id);
+        if (cardItem != null)
+            return cardItem.getQuantity();
+        return 0;
+    }
+
+
+
     public void add(Integer id,HttpSession session, Model model){
         Product product = productService.findById(id);
 
@@ -43,7 +70,7 @@ public class CardService {
         } else {
             HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
             if (card.containsKey(id)) {
-                card.get(id).incrementQuantity();
+                incrementProductAmount(card,id);
             } else {
                 card.put(id,new CardItem(product.getId(),product.getName(),product.getPrice(), 1,product.getImagePath()));
                 session.setAttribute("card", card);
@@ -54,21 +81,20 @@ public class CardService {
     }
 
 
-    public void subtract(@PathVariable Integer id, HttpSession session){
+    public void subtract(Integer id, HttpSession session){
         Product product = productService.findById(id);
         HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
         int quantity = card.get(id).getQuantity();
         if (quantity == 1){
             card.remove(id);
-            if (card.size() == 0){
+            if (card.size() == 0)
                 session.removeAttribute("cart");
-            }
         } else {
             card.put(id,new CardItem(product.getId(),product.getName(),product.getPrice(), --quantity,product.getImagePath()));
         }
     }
 
-    public void remove(@PathVariable Integer id, HttpSession session){
+    public void remove(Integer id, HttpSession session){
         HashMap<Integer,CardItem> card = (HashMap<Integer, CardItem>) session.getAttribute("card");
         card.remove(id);
 

@@ -30,28 +30,7 @@ public class CardController {
 
         if (cardPage != null) return "redirect:/card/details";
 
-
         return "card_view";
-    }
-
-    @GetMapping("/subtract/{id}")
-    public String subtract(@PathVariable Integer id, HttpSession session, HttpServletRequest servletRequest){
-
-        cardService.subtract(id,session);
-
-        String referLink = servletRequest.getHeader("referer");
-
-        return "redirect:" + referLink;
-    }
-
-    @GetMapping("/remove/{id}")
-    public String remove(@PathVariable Integer id, HttpSession session, HttpServletRequest servletRequest){
-
-        cardService.remove(id,session);
-
-        String referLink = servletRequest.getHeader("referer");
-
-        return "redirect:" + referLink;
     }
 
     @GetMapping("/clear")
