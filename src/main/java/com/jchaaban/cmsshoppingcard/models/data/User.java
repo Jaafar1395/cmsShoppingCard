@@ -1,6 +1,8 @@
 package com.jchaaban.cmsshoppingcard.models.data;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,8 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 @Data
+@Getter
+@Setter
 public class User extends IDBasedEntity implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +38,15 @@ public class User extends IDBasedEntity implements UserDetails {
     private String email;
 
     private boolean isAdmin;
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")

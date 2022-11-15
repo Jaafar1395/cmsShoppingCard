@@ -19,6 +19,7 @@ public class UserPdfExporter extends AbstractExporter {
     final static float TABLE_WIDTH_PERCENTAGE = 100f;
     final static int TABLE_CELL_PADDING = 6;
 
+    @Override
     public void export(List<User> userList, HttpServletResponse response) throws IOException {
         setResponseHeader(response,"application/pdf",".pdf");
         Document document = new Document(PageSize.A4);

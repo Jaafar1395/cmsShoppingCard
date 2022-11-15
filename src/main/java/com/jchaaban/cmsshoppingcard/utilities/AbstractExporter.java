@@ -1,11 +1,15 @@
 package com.jchaaban.cmsshoppingcard.utilities;
 
+import com.jchaaban.cmsshoppingcard.models.data.User;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-public class AbstractExporter {
+public abstract class AbstractExporter {
 
     public void setResponseHeader(HttpServletResponse response, String contentType, String extension) {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
@@ -16,4 +20,6 @@ public class AbstractExporter {
         String headerValue = "attachment; filename=" + fileName;
         response.setHeader(headerKey,headerValue);
     }
+
+    abstract public void export(List<User> userList, HttpServletResponse response) throws IOException;
 }
