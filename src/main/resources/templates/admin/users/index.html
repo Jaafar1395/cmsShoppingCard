@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<div th:replace="/fragments/head :: head"></div>
+
+<body>
+<div th:replace="/fragments/nav :: nav-admin"></div>
+<div class="container">
+    <h1 class="display-2 mb-5">Users</h1>
+
+    <a href="/admin/users/exportPdf" class="btn btn-secondary btn-sm mt-1">Export as PDF</a>
+    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>
+
+    <div th:if="${!users.empty}">
+        <table class="table mt-5">
+            <tr class="home">
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone number</th>
+                <th>Is Admin</th>
+            </tr>
+
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.isAdmin}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:replace="fragments/productsPagination"></div>
+
+
+    <div th:unless="${!users.empty}">
+        <h4 class="display-4">There are no Users at the moment</h4>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer :: footer"></div>
+
+
+</body>
+</html>
