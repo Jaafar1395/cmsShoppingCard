@@ -7,8 +7,13 @@
 <div class="container">
     <h1 class="display-2 mb-5">Users</h1>
 
-    <a href="/admin/users/exportPdf" class="btn btn-secondary btn-sm mt-1">Export as PDF</a>
-    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="/admin/users/exportPdf" class="btn btn-danger btn-sm">Export as PDF</a>
+        <a href="/admin/users/exportExel" class="btn btn-success btn-sm">Export as Exel</a>
+        <a href="/admin/users/exportCsv" class="btn btn-warning btn-sm">Export as CSV</a>
+    </div>
+
+<!--    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>-->
 
     <div th:if="${!users.empty}">
         <table class="table mt-5">

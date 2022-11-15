@@ -2,6 +2,7 @@ package com.jchaaban.cmsshoppingcard.controllers.admin;
 
 import com.jchaaban.cmsshoppingcard.models.data.User;
 import com.jchaaban.cmsshoppingcard.services.UserService;
+import com.jchaaban.cmsshoppingcard.utilities.UserExelExporter;
 import com.jchaaban.cmsshoppingcard.utilities.UserPdfExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,12 @@ public class AdminUserController {
         exporter.export(users, response);
     }
 
+    @GetMapping("/exportExel")
+    public void exportExel(HttpServletResponse response) throws IOException {
+        List<User> users = userService.findAllByOrderByUsernameAsc();
+        UserExelExporter exporter = new UserExelExporter();
+        exporter.export(users, response);
+    }
 
 
 
