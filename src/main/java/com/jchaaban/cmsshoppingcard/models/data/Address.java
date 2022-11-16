@@ -32,4 +32,8 @@ public class Address extends IDBasedEntity {
     @PrimaryKeyJoinColumn // den id als joinColumn nutzen
     private User user;
 
+    public String getFullAddress(){
+        return street + " " + city + " " + zipCode;
+    }
+
 }

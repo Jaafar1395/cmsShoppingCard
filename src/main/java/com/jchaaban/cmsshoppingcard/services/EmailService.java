@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 
 @Service
 public class EmailService {
@@ -16,18 +17,18 @@ public class EmailService {
 
     private final String senderEmail = "hadi13afyouni@gmail.com";
 
-    public void sendEmailWithFileAttachment(String username, String receiverEmail) throws MessagingException {
+    public void sendEmailWithFileAttachment(String username, String receiverEmail, File attachment) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setSubject("Hallo " + username + " im Anhang finden Sie die Rechnung Ihrer bestellung");
         helper.setFrom(senderEmail);
         helper.setTo(receiverEmail);
+        helper.addAttachment("Rechnung.pdf", attachment);
 
         helper.setText("<h2>Vielen Dank für Ihren Einkauf<h2>", true);
 
 //        FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/billings/billing.pdf"));
-//        helper.addAttachment("Rechnung.pdf", file);
         mailSender.send(message);
     }
 

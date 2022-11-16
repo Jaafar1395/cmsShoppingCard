@@ -14,6 +14,9 @@ public class OrderItem extends IDBasedEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "item_name")
+    private String itemName;
+
     @Column(name = "unit_price")
     private String unitPrice;
 
@@ -29,8 +32,9 @@ public class OrderItem extends IDBasedEntity {
 
     public OrderItem() {}
 
-    public OrderItem(Integer productId, String price, int quantity, String imagePath) {
+    public OrderItem(Integer productId, String itemName, String price, int quantity, String imagePath) {
         this.productId = productId;
+        this.itemName = itemName;
         this.unitPrice = price;
         this.quantity = quantity;
         this.imageUrl = imagePath;

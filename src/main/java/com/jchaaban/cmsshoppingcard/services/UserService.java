@@ -47,8 +47,9 @@ public class UserService {
     }
 
     public User getUserHavingUsername(String username) {
-        System.out.println("username " + username);
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        System.out.println("UUUUUUUUUUUUU "  + user.getUsername());
+        return user;
     }
 
     public List<User> findAllByOrderByUsernameAsc(){
