@@ -21,14 +21,14 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setSubject("Hallo " + username + " im Anhang finden Sie die Rechnung Ihrer bestellung");
+        helper.setSubject("Renchnung");
         helper.setFrom(senderEmail);
         helper.setTo(receiverEmail);
         helper.addAttachment("Rechnung.pdf", attachment);
 
-        helper.setText("<h2>Vielen Dank für Ihren Einkauf<h2>", true);
+        helper.setText("<h3>Hallo " + username + " im Anhang finden Sie die Rechnung Ihrer Bestellung<h3>", true);
+        helper.setText("<h3>Vielen Dnak für Ihren Eunfauf<h3>", true);
 
-//        FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/billings/billing.pdf"));
         mailSender.send(message);
     }
 
