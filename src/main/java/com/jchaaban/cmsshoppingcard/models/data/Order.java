@@ -45,6 +45,11 @@ public class Order extends IDBasedEntity {
     // und zeigt auf den id von der Address Tabelle
     private Address address;
 
+
+    public String getFullAddress(){
+        return address.getFullAddress();
+    }
+
     public void add(OrderItem item){
 
         if (item != null){

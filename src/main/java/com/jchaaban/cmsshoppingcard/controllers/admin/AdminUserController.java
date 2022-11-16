@@ -1,11 +1,15 @@
 package com.jchaaban.cmsshoppingcard.controllers.admin;
 
+import com.jchaaban.cmsshoppingcard.models.data.Order;
 import com.jchaaban.cmsshoppingcard.models.data.User;
 import com.jchaaban.cmsshoppingcard.services.UserService;
 import com.jchaaban.cmsshoppingcard.utilities.UserCsvExporter;
 import com.jchaaban.cmsshoppingcard.utilities.UserExelExporter;
 import com.jchaaban.cmsshoppingcard.utilities.UserPdfExporter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +30,7 @@ public class AdminUserController {
     public String users(Model model){
         List<User> users = userService.findAllByOrderByUsernameAsc();
         model.addAttribute("users",users);
+
         return "admin/users/index";
     }
 

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<div th:replace="/fragments/head :: head"></div>
+
+<body>
+<div th:replace="/fragments/nav :: nav-admin"></div>
+<div class="container">
+    <h1 class="display-2 mb-5">Orders</h1>
+<!--    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>-->
+
+    <div th:if="${!orders.empty}">
+        <table class="table mt-5">
+            <tr class="home">
+                <th>Order ID</th>
+                <th>Username</th>
+                <th>User email</th>
+                <th>User phone number</th>
+                <th>User address</th>
+                <th>Total price</th>
+                <th>Total quantity</th>
+            </tr>
+
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.user.username}"></td>
+                <td th:text="${order.user.email}"></td>
+                <td th:text="${order.user.phoneNumber}"></td>
+                <td th:text="${order.fullAddress}"></td>
+                <td th:text="${order.totalPrice}"></td>
+                <td th:text="${order.totalQuantity}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:replace="fragments/pagination"></div>
+
+
+    <div th:unless="${!orders.empty}">
+        <h4 class="display-4">There are no Orders at the moment</h4>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer :: footer"></div>
+
+
+</body>
+</html>

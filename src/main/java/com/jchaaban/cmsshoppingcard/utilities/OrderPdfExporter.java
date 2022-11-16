@@ -24,6 +24,7 @@ public class OrderPdfExporter extends PDFTableMaker {
     private final int PDF_TEXT_FONT_SIZE = 15;
     private final int TABLE_BODY_FONT_SIZE = 15;
     private final int TABLE_MARGIN = 15;
+
     public File exportOrderToPdf(Order order, String exportedFileName) throws IOException {
 
         exportedFileName = exportedFileName + ".pdf";
@@ -35,7 +36,7 @@ public class OrderPdfExporter extends PDFTableMaker {
         addText("Bestellungsnummer: " + order.getOrderTrackingNumber(),document);
         addText("Kinde: " + order.getUser().getUsername(),document);
         addText("Email: " + order.getUser().getEmail(),document);
-        addText("Addresse: " + order.getUser().getAddress().getFullAddress(),document);
+        addText("Addresse: " + order.getFullAddress(),document);
         addText("Bestellt am: " +  getFormattedDateAndTimeString(), document);
 
         String [] tableHeader = {"Product", "Image", "Quantity", " Price", "Total"};

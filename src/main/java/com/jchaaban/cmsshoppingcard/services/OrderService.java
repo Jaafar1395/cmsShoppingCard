@@ -1,12 +1,11 @@
 package com.jchaaban.cmsshoppingcard.services;
 
 import com.jchaaban.cmsshoppingcard.models.OrderRepository;
-import com.jchaaban.cmsshoppingcard.models.data.CardItem;
-import com.jchaaban.cmsshoppingcard.models.data.Order;
-import com.jchaaban.cmsshoppingcard.models.data.OrderItem;
-import com.jchaaban.cmsshoppingcard.models.data.User;
+import com.jchaaban.cmsshoppingcard.models.data.*;
 import com.jchaaban.cmsshoppingcard.utilities.OrderPdfExporter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -52,5 +51,13 @@ public class OrderService {
         File file = exporter.exportOrderToPdf(order,order.getOrderTrackingNumber());
         emailService.sendEmailWithFileAttachment(user.getUsername(), user.getEmail(),file);
         Files.delete(file.toPath());
+    }
+
+    public Page<Order> findAllByOrderByDateCreatedAsc(Pageable pageable){
+        return orderRepository.findAllByOrderByDateCreatedAsc(pageable);
+    }
+
+    public long count(){
+        return orderRepository.count();
     }
 }

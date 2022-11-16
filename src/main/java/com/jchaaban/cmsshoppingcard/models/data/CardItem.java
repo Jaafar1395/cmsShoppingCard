@@ -19,7 +19,5 @@ public class CardItem {
         this.imagePath = imagePath;
     }
 
-
-
     public void incrementQuantity(){++quantity;}
 }
