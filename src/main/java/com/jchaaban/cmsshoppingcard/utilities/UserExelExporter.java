@@ -57,7 +57,7 @@ public class UserExelExporter extends AbstractExporter {
     }
 
     private void writeHeaderLineContent(XSSFRow row, XSSFCellStyle cellStyle) {
-        String [] exelHeader = {"User ID", "Username", "Email", " Phone number", "Is Admin"};
+        String [] exelHeader = {"User ID", "Username", "Email", " Phone number", "Is Admin", "Is Enabled"};
         for (int i = 0; i < exelHeader.length; ++i)
             createCell(row,i,exelHeader[i], cellStyle);
     }
@@ -80,7 +80,8 @@ public class UserExelExporter extends AbstractExporter {
             createCell(row,columnIndex++,user.getUsername(),cellStyle);
             createCell(row,columnIndex++,user.getEmail(),cellStyle);
             createCell(row,columnIndex++,user.getPhoneNumber(),cellStyle);
-            createCell(row,columnIndex,user.isAdmin(),cellStyle);
+            createCell(row,columnIndex++,user.isAdmin(),cellStyle);
+            createCell(row,columnIndex,user.isEnabled(),cellStyle);
             columnIndex = 0;
         }
     }

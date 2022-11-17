@@ -15,8 +15,8 @@ public class UserCsvExporter extends AbstractExporter {
     public void export(List<User> userList, HttpServletResponse response) throws IOException {
         setResponseHeader(response,"text/csv",".csv");
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String [] csvHeader = {"User ID", "Username", "Email", " Phone number", "Is Admin"};
-        String [] fieldMapping = {"id", "username", "email", "phoneNumber", "isAdmin"};
+        String [] csvHeader = {"User ID", "Username", "Email", " Phone number", "Is Admin","Is Enabled"};
+        String [] fieldMapping = {"id", "username", "email", "phoneNumber", "isAdmin", "isEnabled"};
         writeFileContent(userList, csvWriter, csvHeader, fieldMapping);
         csvWriter.close();
 

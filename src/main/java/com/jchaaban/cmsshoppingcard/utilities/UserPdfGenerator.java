@@ -12,7 +12,7 @@ public class UserPdfGenerator extends PDFTableMaker {
 
     public Table generateUsersPdf(List<User> userList, Document document, String title){
         setPdfTitle(title,document);
-        String [] tableHeaderTitles = {"User ID", "Username", "Email", " Phone number", "Is Admin"};
+        String [] tableHeaderTitles = {"User ID", "Username", "Email", " Phone number", "Is Admin", "Is Enabled"};
         Table table = createTableHavingTitles(tableHeaderTitles.length);
         writeTableHeader(table,tableHeaderTitles);
         writeTableData(table,TABLE_CONTENT_FONT_SIZE,userList);
@@ -27,6 +27,7 @@ public class UserPdfGenerator extends PDFTableMaker {
             addContentCell(table,fontsize,user.getEmail());
             addContentCell(table,fontsize,user.getPhoneNumber());
             addContentCell(table,fontsize,String.valueOf(user.isAdmin()));
+            addContentCell(table,fontsize,String.valueOf(user.isEnabled()));
         }
     }
 }

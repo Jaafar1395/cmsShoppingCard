@@ -45,6 +45,10 @@ public class User extends IDBasedEntity implements UserDetails {
         return isAdmin;
     }
 
+    public boolean getIsEnabled() {
+        return isEnabled;
+    }
+
     public boolean isAdmin() {
         return isAdmin;
     }
