@@ -1,6 +1,21 @@
 $(function (){
-    $(".confirmDeletion").click(function (){
-       if (!confirm("Confirm deletion")) return false;
+    $(".confirmDeletion").click(function (e){
+        e.preventDefault();
+        if (confirm("Confirm deletion")){
+           let url = $(this).attr('href');
+           let anchorTag = $(this);
+           $.get(url, {}, function () {
+               return true;
+           }).done(function (){
+               anchorTag.closest('tr').remove();
+               if ($('table tr').length === 1) {
+                   let completeUrl = window.location.href;
+                   completeUrl = completeUrl.substring(0, completeUrl.lastIndexOf('?'));
+                   window.location.replace(completeUrl);
+               }
+           });
+       }
+        return false;
     });
 
 

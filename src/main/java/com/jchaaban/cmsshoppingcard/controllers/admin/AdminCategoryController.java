@@ -3,6 +3,9 @@ package com.jchaaban.cmsshoppingcard.controllers.admin;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin/categories")
@@ -21,9 +23,19 @@ public class AdminCategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public String index(Model model){
-        List<Category> categories = categoryService.findAllByOrderBySortingAsc();
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer pageNum){
+        int page = pageNum == null ? 0 : pageNum;
+        int perPage = 4;
+        Pageable pageable = PageRequest.of(page,perPage);
+        Long count = categoryService.count();
+        double pageCount = Math.ceil((double) count / (double) perPage);
+        Page<Category> categories = categoryService.findAllByOrderBySortingAscPage(pageable);
         model.addAttribute("categories", categories);
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("perPage", perPage);
+        model.addAttribute("count", count);
+        model.addAttribute("page", page);
+
         return "admin/categories/index";
     }
 

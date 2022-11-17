@@ -5,6 +5,8 @@ import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
 import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,6 +25,10 @@ public class CategoryService {
 
     public List<Category> findAllByOrderBySortingAsc(){
         return repository.findAllByOrderBySortingAsc();
+    }
+
+    public Page<Category> findAllByOrderBySortingAscPage(Pageable pageable){
+        return repository.findAllByOrderBySortingAsc(pageable);
     }
 
     public Category findById(Integer id){
@@ -98,5 +104,9 @@ public class CategoryService {
         if (slug.trim().length() == 0)
             return category.getName().toLowerCase().replace(" ", "-");
         return slug.toLowerCase().replace(" ", "-");
+    }
+
+    public Long count() {
+        return repository.count();
     }
 }

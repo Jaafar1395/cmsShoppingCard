@@ -28,10 +28,12 @@
         </table>
     </div>
 
+    <div th:replace="fragments/pagination"></div>
     <div th:unless="${!categories.empty}">
         <h4 class="display-4">There are no categories at the moment</h4>
     </div>
 </div>
+
 
 <div th:replace="/fragments/footer :: footer"></div>
 
