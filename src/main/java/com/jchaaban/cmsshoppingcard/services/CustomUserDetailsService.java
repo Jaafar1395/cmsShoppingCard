@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
-        if (user != null)
+        if (user != null && user.isEnabled())
             return user;
 
         throw new UsernameNotFoundException("User having username: " + username + " was not found");

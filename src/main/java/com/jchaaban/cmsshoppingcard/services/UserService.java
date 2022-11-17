@@ -4,8 +4,6 @@ import com.jchaaban.cmsshoppingcard.models.UserRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Address;
 import com.jchaaban.cmsshoppingcard.models.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,21 +39,28 @@ public class UserService {
         return false;
     }
 
-    public void saveNewUser(User user, Address address) {
-        user.setAdmin(false);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setAddress(address);
+    public void save(User user){
         userRepository.save(user);
     }
 
-    public User getUserHavingUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        System.out.println("UUUUUUUUUUUUU "  + user.getUsername());
-        return user;
+    public void saveNewUser(User user, Address address) {
+        user.setEnabled(true);
+        user.setAdmin(false);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAddress(address);
+        save(user);
     }
 
-    public List<User> findAllByOrderByUsernameAsc(){
-        return userRepository.findAllByOrderByUsernameAsc();
+    public User getUserHavingUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public List<User> findAllByOrderByIsAdminDesc(){
+        return userRepository.findAllByOrderByIsAdminDesc();
+    }
+
+    public User findById(Integer id) {
+        return userRepository.findById(id).get();
     }
 
     public Long count() {

@@ -32,18 +32,17 @@ public class SecurityConfig {
                 .antMatchers( "/", "/category/**", "/register", "/login").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
-                .formLogin() // (5)
+                .formLogin()
                 .loginPage("/login").successHandler(loginSuccessHandler) // (5)
                 .permitAll()
                 .and()
-                .logout() // (6)
+                .logout()
                 .permitAll()
                 .and()
                 .httpBasic();
 
         return http.build();
     }
-
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

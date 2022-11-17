@@ -39,6 +39,8 @@ public class User extends IDBasedEntity implements UserDetails {
 
     private boolean isAdmin;
 
+    private boolean isEnabled;
+
     public boolean getIsAdmin() {
         return isAdmin;
     }
@@ -66,6 +68,11 @@ public class User extends IDBasedEntity implements UserDetails {
     }
 
     @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -77,11 +84,6 @@ public class User extends IDBasedEntity implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
         return true;
     }
 }

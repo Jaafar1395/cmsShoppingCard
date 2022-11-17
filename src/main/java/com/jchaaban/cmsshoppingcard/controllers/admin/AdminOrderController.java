@@ -39,7 +39,7 @@ public class AdminOrderController {
         return "admin/orders/index";
     }
 
-    @GetMapping("/order/{id}")
+    @GetMapping("/{id}")
     public String order(@PathVariable(name = "id") Integer id, Model model){
         Order order = orderService.getOrderById(id);
         model.addAttribute("order", order);
