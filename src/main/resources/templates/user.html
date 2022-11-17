@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="/fragments/head"></head>
+
+<body>
+
+<nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-7">
+            <h2 class="display-4 mb-5" th:text="'User: ' + ${user.username} + ', details'"></h2>
+
+
+            <dl class="row">
+                <dt class="col-sm-3">Username:</dt>
+                <dd class="col-sm-9" th:text="${user.username}"></dd>
+
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9" th:text="${user.email}"></dd>
+
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9" th:text="${user.phoneNumber}"></dd>
+
+                <dt class="col-sm-3">Address:</dt>
+                <dd class="col-sm-9" th:text="${user.address.getFullAddress}"></dd>
+
+                <div class="col-4" th:if="${#authentication.getPrincipal().getId()} == ${user.id}">
+                    <a th:href="@{'/users/edit/' + ${user.id}}" class="btn btn-warning mt-3">Edit</a>
+                </div>
+            </dl>
+
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer"></div>

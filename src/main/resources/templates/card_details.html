@@ -36,7 +36,7 @@
                         <span th:class="${element.value.id} + '_quantity'" th:text="${element.value.quantity}"></span>
                         <a th:attr="data-id=${element.value.id}" class="btn btn-success btn-sm incrementQuantity">+</a>
 
-                        <a th:href="@{'/card/subtract/'+${element.value.id}}" th:attr="data-id=${element.value.id}"
+                        <a th:href="@{'/card/subtract/' + ${element.value.id}}" th:attr="data-id=${element.value.id}"
                            class="btn btn-primary btn-sm decrementQuantity">-</a>
                         <a th:attr="data-id=${element.value.id}" th:href="@{'/card/remove/'+${element.value.id}}"
                            class="btn btn-danger btn-sm remove">remove</a>

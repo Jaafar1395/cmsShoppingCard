@@ -29,23 +29,11 @@ public class RegistrationController {
     public String register(@Valid User user, BindingResult userBindingResult,
                            @Valid Address address, BindingResult addressBindingResult, Model model) {
 
-        if (addressBindingResult.hasErrors() || userBindingResult.hasErrors())
-            return "register";
+        boolean formHasErrors = userService.validateUserForm(user,userBindingResult,addressBindingResult,model,
+                false);
 
-        if (!user.getPassword().equals(user.getConfirmPassword())) {
-            model.addAttribute("passwordMatchProblem", "Passwords are not matching");
+        if (!formHasErrors)
             return "register";
-        }
-
-        if (userService.emailExist(user,false)) {
-            model.addAttribute("existingEmailProblem","The email you entered is already used");
-            return "register";
-        }
-
-        if (userService.usernameExist(user,false)) {
-            model.addAttribute("existingUsernameProblem","The username you entered is already used");
-            return "register";
-        }
 
         userService.saveNewUser(user,address);
         return "redirect:/login";

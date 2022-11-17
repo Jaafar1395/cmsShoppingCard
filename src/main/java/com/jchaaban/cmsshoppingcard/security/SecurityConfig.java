@@ -31,6 +31,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers( "/", "/category/**", "/register", "/login").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/users/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").successHandler(loginSuccessHandler) // (5)

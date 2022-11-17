@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="/fragments/head"></head>
+
+<body>
+
+<nav th:replace="/fragments/nav :: nav-front"></nav>
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-7">
+            <h3 class="display-4">Edit your personal info</h3>
+
+            <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass }"></div>
+
+            <form method="post" th:action="@{'/users/edit'}">
+
+                <h3 class="mt-5">Personal info</h3>
+
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" class="form-control" th:field="*{user.username}" placeholder="Username">
+                    <span class="error" th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}"></span>
+                    <span class="error" th:if="${existingUsernameProblem}" th:text="${existingUsernameProblem}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" th:field="*{user.password}">
+                    <span class="error" th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password:</label>
+                    <input type="password" class="form-control" th:field="*{user.confirmPassword}">
+                    <span class="error" th:if="${passwordMatchProblem}" th:text="${passwordMatchProblem}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>E-mail:</label>
+                    <input type="text" class="form-control" th:field="*{user.email}" placeholder="E-mail">
+                    <span class="error" th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}"></span>
+                    <span class="error" th:if="${existingEmailProblem}" th:text="${existingEmailProblem}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone number:</label>
+                    <input type="text" class="form-control" th:field="*{user.phoneNumber}" placeholder="Phone number">
+                    <span class="error" th:if="${#fields.hasErrors('user.phoneNumber')}" th:errors="*{user.phoneNumber}"></span>
+                </div>
+
+
+                <h3 class="mt-4">Address</h3>
+
+                <div class="form-group">
+                    <label>Street and house number:</label>
+                    <input type="text" class="form-control" th:field="*{address.street}" name="street" placeholder="Street">
+                    <span class="error" th:if="${#fields.hasErrors('address.street')}" th:errors="*{address.street}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>City:</label>
+                    <input type="text" class="form-control" th:field="*{address.city}" placeholder="City">
+                    <span class="error" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Postal code:</label>
+                    <input type="text" class="form-control" th:field="*{address.zipCode}" placeholder="Postal code">
+                    <span class="error" th:if="${#fields.hasErrors('address.zipCode')}" th:errors="*{address.zipCode}"></span>
+                </div>
+
+                <input type="hidden" th:field="*{user.id}" th:value="${user.id}">
+                <input type="hidden" th:field="*{address.id}" th:value="${address.id}">
+
+                <button class="btn btn-danger mt-3 mb-5">Edit</button>
+
+            </form>
+
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer"></div>
+
+</body>
+
+</html>
