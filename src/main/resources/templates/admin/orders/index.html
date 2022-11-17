@@ -6,8 +6,6 @@
 <div th:replace="/fragments/nav :: nav-admin"></div>
 <div class="container">
     <h1 class="display-2 mb-5">Orders</h1>
-<!--    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass + ' mt-3'}"></div>-->
-
     <div th:if="${!orders.empty}">
         <table class="table mt-5">
             <tr class="home">
@@ -21,7 +19,10 @@
             </tr>
 
             <tr th:each="order : ${orders}">
-                <td th:text="${order.id}"></td>
+
+                <td>
+                    <a class="text-decoration-none" th:href="@{'/admin/orders/order/' + ${order.id}}" th:text="${order.id}"></a>
+                </td>
                 <td th:text="${order.user.username}"></td>
                 <td th:text="${order.user.email}"></td>
                 <td th:text="${order.user.phoneNumber}"></td>

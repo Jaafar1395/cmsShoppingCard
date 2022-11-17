@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,6 +37,14 @@ public class AdminOrderController {
         model.addAttribute("page", page);
 
         return "admin/orders/index";
+    }
+
+    @GetMapping("/order/{id}")
+    public String order(@PathVariable(name = "id") Integer id, Model model){
+        Order order = orderService.getOrderById(id);
+        model.addAttribute("order", order);
+        model.addAttribute("orderDetailsPage", true);
+        return "admin/orders/order";
     }
 
 

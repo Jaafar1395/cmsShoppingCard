@@ -57,6 +57,10 @@ public class OrderService {
         return orderRepository.findAllByOrderByDateCreatedAsc(pageable);
     }
 
+    public Order getOrderById(Integer id){
+        return orderRepository.findById(id).get();
+    }
+
     public long count(){
         return orderRepository.count();
     }
