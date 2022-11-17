@@ -65,8 +65,6 @@ public class UserService {
             return false;
         }
 
-        System.out.println("heeee2ere");
-
         if (emailExist(user,isEditMode)) {
             model.addAttribute("existingEmailProblem","The email you entered is already used");
             return false;
@@ -84,20 +82,20 @@ public class UserService {
         return userRepository.count();
     }
 
-    private boolean usernameExist(User user, boolean editMode){
+    private boolean usernameExist(User user, boolean isEditMode){
         User existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser != null){
-            if (editMode)
+            if (isEditMode)
                 return existingUser.getId() != user.getId();
             return true;
         }
         return false;
     }
 
-    private boolean emailExist(User user, boolean editMode){
+    private boolean emailExist(User user, boolean isEditMode){
         User existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser != null){
-            if (editMode)
+            if (isEditMode)
                 return existingUser.getId() != user.getId();
             return true;
         }

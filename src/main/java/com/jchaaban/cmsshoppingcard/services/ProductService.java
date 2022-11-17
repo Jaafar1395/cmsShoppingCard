@@ -46,10 +46,10 @@ public class ProductService {
     }
 
 
-    public boolean productExist(Product product, String slug, boolean editMode){
+    public boolean productExist(Product product, String slug, boolean isEditMode){
         Product existingProduct = repository.findBySlug(slug);
         if (existingProduct != null){
-            if (editMode)
+            if (isEditMode)
                 return existingProduct.getId() != product.getId();
             return true;
         }

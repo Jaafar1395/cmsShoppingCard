@@ -16,8 +16,10 @@
 
             <dl class="row">
                 <dt class="col-sm-3">Ordered by:</dt>
-                <dd class="col-sm-9" th:text="${order.user.username}"></dd>
 
+                <dd class="col-sm-9">
+                    <a class="text-decoration-none" th:href="@{'/users/' + ${order.user.id}}" th:text="${order.user.username}"></a>
+                </dd>
                 <dt class="col-sm-3">Ordered in :</dt>
                 <dd class="col-sm-9" th:text="${#dates.format(order.dateCreated, 'dd-MM-yyyy | HH:mm')}"></dd>
             </dl>
@@ -34,7 +36,9 @@
                 <tr th:each="orderItem : ${order.orderItems}">
                     <td th:text="${orderItem.itemName}"></td>
                     <td>
-                        <img style="width: 100px;" th:src="@{${orderItem.imageUrl}}"/>
+                        <a th:href="@{'/product/' + ${orderItem.productId}}">
+                            <img style="width: 100px;" th:src="@{${orderItem.imageUrl}}"/>
+                        </a>
                     </td>
                     <td th:text="${orderItem.quantity}"></td>
                     <td th:text="'€' + ${orderItem.unitPrice}"></td>

@@ -67,10 +67,10 @@ public class PageService {
         repository.save(page);
     }
 
-    public boolean pageExist(Page category, String pageSlug, boolean editMode){
+    public boolean pageExist(Page category, String pageSlug, boolean isEditMode){
         Page existingPage = repository.findBySlug(pageSlug);
         if (existingPage != null){
-            if (editMode)
+            if (isEditMode)
                 return category.getId() != existingPage.getId();
             return true;
         }

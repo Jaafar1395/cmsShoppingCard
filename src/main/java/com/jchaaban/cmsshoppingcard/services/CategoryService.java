@@ -47,10 +47,10 @@ public class CategoryService {
         repository.deleteById(id);
     }
 
-    public boolean categoryExist(Category category, String categoryName, boolean editMode){
+    public boolean categoryExist(Category category, String categoryName, boolean isEditMode){
         Category existingCategory = repository.findByName(categoryName);
         if (existingCategory != null){
-            if (editMode)
+            if (isEditMode)
                 return category.getId() != existingCategory.getId();
             return true;
         }

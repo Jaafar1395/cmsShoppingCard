@@ -12,7 +12,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/card/json")
 @SuppressWarnings("unchecked")
-public class CardJsonController {
+public class CardRestController {
 
     @Autowired
     private CardService cardService;

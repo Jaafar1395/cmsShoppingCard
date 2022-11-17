@@ -1,4 +1,4 @@
-<div th:fragments="card" th:if="${checkoutDetailsPage == null && orderDetailsPage == null}">
+<div sec:authorize="hasAuthority('ROLE_USER')" th:fragments="card" th:if="${checkoutDetailsPage == null}">
     <div th:if="${session.containsKey('card')}" class="card cartActive bg-dark text-white p-3 mt-3">
         <div th:replace="/fragments/cardInfo.html :: cardInfo"></div>
     </div>

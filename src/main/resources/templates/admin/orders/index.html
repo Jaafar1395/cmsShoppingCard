@@ -23,7 +23,11 @@
                 <td>
                     <a class="text-decoration-none" th:href="@{'/admin/orders/' + ${order.id}}" th:text="${order.id}"></a>
                 </td>
-                <td th:text="${order.user.username}"></td>
+
+                <td>
+                    <a class="text-decoration-none" th:href="@{'/users/' + ${order.user.id}}" th:text="${order.user.username}"></a>
+                </td>
+
                 <td th:text="${order.user.email}"></td>
                 <td th:text="${order.user.phoneNumber}"></td>
                 <td th:text="${order.fullAddress}"></td>

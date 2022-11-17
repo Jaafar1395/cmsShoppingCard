@@ -21,7 +21,7 @@
 
 
         <form th:if="${principal != null}" th:action="@{'/logout'}" method="post">
-            <a th:href="@{'/users/' + ${#authentication.getPrincipal().getId()}}" class="text-white mr-3" th:text="${'Hi ' + principal}"></a>
+            <a th:href="@{'/users/' + ${#authentication.getPrincipal().getId()}}" class="text-white mr-3 text-decoration-none" th:text="${'Hi ' + principal}"></a>
             <button class="btn btn-secondary">Logout</button>
         </form>
 
@@ -50,7 +50,7 @@
         </ul>
 
         <form th:if="${principal != null}" th:action="@{'/logout'}" method="post">
-            <a th:href="@{'/users/' + ${#authentication.getPrincipal().getId()}}" class="text-white mr-3" th:text="${'Hi ' + principal}"></a>
+            <a th:href="@{'/users/' + ${#authentication.getPrincipal().getId()}}" class="text-white mr-3 text-decoration-none" th:text="${'Hi ' + principal}"></a>
             <button class="btn btn-secondary">Logout</button>
         </form>
     </div>
