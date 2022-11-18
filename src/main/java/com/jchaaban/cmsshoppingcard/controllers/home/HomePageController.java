@@ -1,9 +1,7 @@
 package com.jchaaban.cmsshoppingcard.controllers.home;
 
 import com.jchaaban.cmsshoppingcard.models.PageRepository;
-import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Page;
-import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

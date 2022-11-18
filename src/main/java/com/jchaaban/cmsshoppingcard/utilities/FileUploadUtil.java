@@ -43,16 +43,6 @@ public class FileUploadUtil {
         }
     }
 
-    public static void deleteDirectory(String directory){
-        cleanDirectory(directory);
-        try {
-            File dir = new File(directory);
-            dir.delete();
-        } catch (Exception e) {
-            System.out.println("Could not delete Directory: " + directory);
-        }
-    }
-
     public static void deleteFile(String uploadDirectory, String fileName) throws IOException {
         Path uploadPath = Paths.get(uploadDirectory);
         try {

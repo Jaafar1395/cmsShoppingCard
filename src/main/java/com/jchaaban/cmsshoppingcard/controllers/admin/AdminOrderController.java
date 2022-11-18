@@ -1,7 +1,6 @@
 package com.jchaaban.cmsshoppingcard.controllers.admin;
 
 import com.jchaaban.cmsshoppingcard.models.data.Order;
-import com.jchaaban.cmsshoppingcard.models.data.Product;
 import com.jchaaban.cmsshoppingcard.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

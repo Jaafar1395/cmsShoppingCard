@@ -91,8 +91,6 @@ public class AdminProductsController {
         return "admin/products/edit";
     }
 
-    // todo check why images are not showing when changing the category
-
     @PostMapping("/edit")
     public String edit(@Valid Product product,
                       BindingResult bindingResult,

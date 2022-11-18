@@ -5,7 +5,6 @@
 <body>
 <div th:replace="/fragments/nav :: nav-admin"></div>
 <div class="container">
-    <!-- in case the form has errors get the pageTitle from the model-->
     <h1 class="display-2 mb-5" th:text="'Edit ' + (${pageTitle} ?: ${page.title}) ">Edit a page</h1>
 
     <a href="/admin/pages" class="btn btn-dark mb-3">Back to pages</a>

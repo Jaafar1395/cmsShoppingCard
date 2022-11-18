@@ -5,7 +5,6 @@
 <body>
 <div th:replace="/fragments/nav :: nav-admin"></div>
 <div class="container">
-    <!-- Example row of columns -->
     <h1 class="display-2 mb-5">Categories</h1>
     <a href="/admin/categories/add" class="btn btn-success mt-1">Add new</a>
 
@@ -19,7 +18,6 @@
                 <th>Delete</th>
             </tr>
 
-            <!--every element in the table must have an id for sorting-->
             <tr th:each="category: ${categories}" th:id="'id_' + ${category.id}">
                 <td th:text="${category.name}"></td>
                 <td><a class="btn btn-primary" th:href="@{'/admin/categories/edit/' + ${category.id}}">Edit</a></td>

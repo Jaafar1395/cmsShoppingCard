@@ -36,8 +36,7 @@ public class UserController {
 
         return "editUser";
     }
-//
-//
+
     @PostMapping("/edit")
     public String edit(@Valid User user, BindingResult userBindingResult,
                            @Valid Address address, BindingResult addressBindingResult, Model model) {

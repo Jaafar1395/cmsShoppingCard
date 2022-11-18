@@ -46,10 +46,12 @@ public class CardService {
         card.get(id).incrementQuantity();
     }
 
+
     public double getProductTotalPrice(HashMap<Integer,CardItem> card,Integer id){
         CardItem cardItem = card.get(id);
         return cardItem.getQuantity() * Double.parseDouble(cardItem.getPrice());
     }
+
 
     public int getProductQuantity(HashMap<Integer,CardItem> card,Integer id){
         CardItem cardItem = card.get(id);
@@ -57,7 +59,6 @@ public class CardService {
             return cardItem.getQuantity();
         return 0;
     }
-
 
 
     public void add(Integer id,HttpSession session, Model model){

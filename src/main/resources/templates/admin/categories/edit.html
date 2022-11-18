@@ -5,7 +5,6 @@
 <body>
 <div th:replace="/fragments/nav :: nav-admin"></div>
 <div class="container">
-    <!-- in case the form has errors get the categoryTitle from the model-->
     <h1 class="display-2 mb-5" th:text="'Edit ' + (${categoryTitle} ?: ${category.name}) ">Edit a Category</h1>
 
     <a href="/admin/categories" class="btn btn-dark mb-3">Back to categories</a>
@@ -24,7 +23,6 @@
             <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         </div>
 
-        <!--in case of edit the id don't get generated so we need to pass it as a hidden field-->
         <input type="hidden" th:field="*{id}" th:value="${category.id}">
         <input type="hidden" th:field="*{sorting}" th:value="${category.sorting}">
         <input type="hidden" th:field="*{slug}" th:value="${category.slug}">

@@ -1,7 +1,6 @@
 package com.jchaaban.cmsshoppingcard.services;
 
 import com.jchaaban.cmsshoppingcard.models.PageRepository;
-import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
