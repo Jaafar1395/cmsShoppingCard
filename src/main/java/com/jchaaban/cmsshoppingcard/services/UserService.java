@@ -4,6 +4,8 @@ import com.jchaaban.cmsshoppingcard.models.UserRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Address;
 import com.jchaaban.cmsshoppingcard.models.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -43,6 +45,10 @@ public class UserService {
 
     public User getUserHavingUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public Page<User> findAllByOrderByIsAdminDesc(Pageable pageable){
+        return userRepository.findAllByOrderByIsAdminDesc(pageable);
     }
 
     public List<User> findAllByOrderByIsAdminDesc(){
