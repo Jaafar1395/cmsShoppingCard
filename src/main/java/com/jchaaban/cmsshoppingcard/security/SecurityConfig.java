@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.security;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,11 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired private LoginSuccessHandler loginSuccessHandler;
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    private CmsShoppingCardProps properties;
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
@@ -46,7 +51,8 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/images/**", "media/**", "/js/**", "/webjars/**");
+
+        return (web) -> web.ignoring().antMatchers("/images/**", properties.getImgUploadDir() + "/**", "/js/**", "/webjars/**");
     }
 
     @Bean

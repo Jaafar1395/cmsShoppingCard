@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.services;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.ProductRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
 import com.jchaaban.cmsshoppingcard.utilities.FileUploadUtil;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +20,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+
+    @Autowired
+    private CmsShoppingCardProps properties;
 
     public List<Product> findAll(){
         return repository.findAll();
@@ -61,13 +64,19 @@ public class ProductService {
     }
 
     public boolean invalidFileFormat(String filename){
-        return !(filename.endsWith("jpg") || filename.endsWith("png") || filename.endsWith("jpeg"));
+
+        for (String format : properties.getAcceptedImgFormats()) {
+            if (filename.endsWith(format))
+                return false;
+        }
+
+        return true;
     }
 
     public void deleteProduct(Integer id) throws IOException {
         Product product = repository.findById(id).get();
         repository.deleteById(id);
-        FileUploadUtil.deleteFile("media", product.getImage());
+        FileUploadUtil.deleteFile(properties.getImgUploadDir(), product.getImage());
     }
 
     public void saveNewProduct(Product product,
@@ -77,7 +86,7 @@ public class ProductService {
         String imageStoredName = UUID.randomUUID() + "--" + filename;
         product.setSlug(slug);
         product.setImage(imageStoredName);
-        String uploadDirectory = "media";
+        String uploadDirectory = properties.getImgUploadDir();
         FileUploadUtil.saveFile(uploadDirectory, imageStoredName, file);
         handelSuccessOperation(product,"Product was successfully added",attributes);
         repository.save(product);
@@ -87,7 +96,7 @@ public class ProductService {
                                   String filename, String slug, boolean newFileUploaded,
                                   RedirectAttributes attributes) throws IOException {
         product.setSlug(slug);
-        String uploadDirectory = "media";
+        String uploadDirectory = properties.getImgUploadDir();
         if (newFileUploaded) {
             String imageStoredName = UUID.randomUUID() + "--" + filename;
             product.setImage(imageStoredName);
@@ -98,8 +107,6 @@ public class ProductService {
         handelSuccessOperation(null, "Product was successfully edited",attributes);
         repository.save(product);
     }
-
-
 
     public void handelNoFileUploaded(Product product, RedirectAttributes attributes){
         handelFailOperation(product, "Please select an image for the product", attributes);

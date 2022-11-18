@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.controllers.admin;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,13 @@ public class AdminCategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CmsShoppingCardProps properties;
+
     @GetMapping
     public String index(Model model, @RequestParam(value = "page", required = false) Integer pageNum){
         int page = pageNum == null ? 0 : pageNum;
-        int perPage = 4;
+        int perPage = properties.getStandardPageSize();
         Pageable pageable = PageRequest.of(page,perPage);
         Long count = categoryService.count();
         double pageCount = Math.ceil((double) count / (double) perPage);

@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.services;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,14 +16,16 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    private final String senderEmail = "hadi13afyouni@gmail.com";
+    @Autowired
+    private CmsShoppingCardProps properties;
+
 
     public void sendEmailWithFileAttachment(String username, String receiverEmail, File attachment) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setSubject("Renchnung");
-        helper.setFrom(senderEmail);
+        helper.setFrom(properties.getMail());
         helper.setTo(receiverEmail);
         helper.addAttachment("Rechnung.pdf", attachment);
 

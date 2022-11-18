@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.services;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.CategoryRepository;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
@@ -18,6 +19,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
+
+    @Autowired
+    private CmsShoppingCardProps properties;
 
     public List<Category> findAll(){
         return repository.findAll();
@@ -41,9 +45,8 @@ public class CategoryService {
 
     public void delete(Integer id) throws IOException {
         Category category = repository.findById(id).get();
-        String categoryName = category.getName();
         for (Product product : category.getProducts())
-            FileUploadUtil.deleteFile("media/" + categoryName, product.getImage());
+            FileUploadUtil.deleteFile(properties.getImgUploadDir(), product.getImage());
         repository.deleteById(id);
     }
 

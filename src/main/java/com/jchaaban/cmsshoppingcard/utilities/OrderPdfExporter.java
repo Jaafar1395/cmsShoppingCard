@@ -8,8 +8,10 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.data.Order;
 import com.jchaaban.cmsshoppingcard.models.data.OrderItem;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +21,9 @@ import java.nio.file.Paths;
 
 
 public class OrderPdfExporter extends PDFTableMaker {
+
+    @Autowired
+    private CmsShoppingCardProps properties;
 
     private final int IMAGE_HEIGHT = 10;
     private final int PDF_TEXT_FONT_SIZE = 15;
@@ -65,9 +70,10 @@ public class OrderPdfExporter extends PDFTableMaker {
     }
 
     private String getOrderItemImagePath(OrderItem orderItem){
+        String imgUploadDir = properties.getImgUploadDir();
         String url = orderItem.getImageUrl().substring(1);
-        Path uploadPath = Paths.get("media");
-        Path filePath = uploadPath.resolve(url.replace("media/", ""));
+        Path uploadPath = Paths.get(imgUploadDir);
+        Path filePath = uploadPath.resolve(url.replace(imgUploadDir + "/", ""));
         return filePath.toString();
     }
 

@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.controllers.home;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.data.Category;
 import com.jchaaban.cmsshoppingcard.models.data.Product;
 import com.jchaaban.cmsshoppingcard.services.CategoryService;
@@ -21,14 +22,18 @@ public class CategoriesController {
 
     @Autowired
     private CategoryService categoryService;
+
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CmsShoppingCardProps properties;
 
     @GetMapping("/{slug}")
     public String category(@PathVariable String slug, Model model,
                            @RequestParam(value = "page", required = false) Integer pageNum){
         int page = pageNum == null ? 0 : pageNum;
-        int perPage = 4;
+        int perPage = properties.getStandardPageSize();
         Pageable pageable = PageRequest.of(page,perPage);
         long count;
         Page<Product> products;
