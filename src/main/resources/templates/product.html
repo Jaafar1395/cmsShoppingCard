@@ -21,7 +21,7 @@
                         <div class="desc" th:utext="${product.description}"></div>
                         <p th:text="'€' + ${product.price}"></p>
 
-                        <div style="position: relative;" sec:authorize="hasAuthority('ROLE_USER')">
+                        <div style="position: relative;" sec:authorize="!hasAuthority('ROLE_ADMIN')">
                             <p>
                                 <a class="btn btn-primary addToCard" th:attr="data-id=${product.id}">Add to card</a>
                             </p>

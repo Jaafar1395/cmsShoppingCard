@@ -7,11 +7,8 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.HorizontalAlignment;
-
-import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.data.Order;
 import com.jchaaban.cmsshoppingcard.models.data.OrderItem;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +16,17 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 public class OrderPdfExporter extends PDFTableMaker {
-
-    @Autowired
-    private CmsShoppingCardProps properties;
 
     private final int IMAGE_HEIGHT = 10;
     private final int PDF_TEXT_FONT_SIZE = 15;
     private final int TABLE_BODY_FONT_SIZE = 15;
     private final int TABLE_MARGIN = 15;
+    private String imagesUploadDir;
+
+    public OrderPdfExporter(String imagesUploadDir) {
+        this.imagesUploadDir = imagesUploadDir;
+    }
 
     public File exportOrderToPdf(Order order, String exportedFileName) throws IOException {
 
@@ -70,10 +68,9 @@ public class OrderPdfExporter extends PDFTableMaker {
     }
 
     private String getOrderItemImagePath(OrderItem orderItem){
-        String imgUploadDir = properties.getImgUploadDir();
         String url = orderItem.getImageUrl().substring(1);
-        Path uploadPath = Paths.get(imgUploadDir);
-        Path filePath = uploadPath.resolve(url.replace(imgUploadDir + "/", ""));
+        Path uploadPath = Paths.get(imagesUploadDir);
+        Path filePath = uploadPath.resolve(url.replace(imagesUploadDir + "/", ""));
         return filePath.toString();
     }
 

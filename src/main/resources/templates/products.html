@@ -20,7 +20,7 @@
                         <h4 th:text="${product.name}"></h4>
                         <p th:text="'€' + ${product.price}"></p>
 
-                        <div sec:authorize="hasAuthority('ROLE_USER')" style="position: relative;">
+                        <div sec:authorize="!hasAuthority('ROLE_ADMIN')" style="position: relative;">
                             <p>
                                 <a class="btn btn-primary addToCard" th:attr="data-id=${product.id}">Add to card</a>
                             </p>

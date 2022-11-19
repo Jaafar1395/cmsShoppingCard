@@ -1,5 +1,6 @@
 package com.jchaaban.cmsshoppingcard.services;
 
+import com.jchaaban.cmsshoppingcard.config.CmsShoppingCardProps;
 import com.jchaaban.cmsshoppingcard.models.OrderRepository;
 import com.jchaaban.cmsshoppingcard.models.data.*;
 import com.jchaaban.cmsshoppingcard.utilities.OrderPdfExporter;
@@ -17,6 +18,9 @@ import java.util.UUID;
 
 @Service
 public class OrderService {
+
+    @Autowired
+    private CmsShoppingCardProps properties;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -47,7 +51,7 @@ public class OrderService {
     }
 
     public void sendOrderEmailToUser(Order order,User user) throws IOException, MessagingException {
-        OrderPdfExporter exporter = new OrderPdfExporter();
+        OrderPdfExporter exporter = new OrderPdfExporter(properties.getImgUploadDir());
         File file = exporter.exportOrderToPdf(order,order.getOrderTrackingNumber());
         emailService.sendEmailWithFileAttachment(user.getUsername(), user.getEmail(),file);
         Files.delete(file.toPath());
